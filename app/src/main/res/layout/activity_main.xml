@@ -4,21 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.framgia.music_31.MainActivity">
+    tools:context="com.framgia.music_31.MainActivity"
+    >
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/height_appbar">
+        android:layout_height="@dimen/dp_56"
+        >
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
             <android.support.v7.widget.SearchView
                 android:id="@+id/searchview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/searchview_background"
-                app:queryHint="@string/text_hint_search">
+                app:queryHint="@string/text_hint_search"
+                >
 
             </android.support.v7.widget.SearchView>
         </android.support.v7.widget.Toolbar>
@@ -27,15 +31,17 @@
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/height_appbar"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        android:layout_marginBottom="@dimen/dp_56"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        />
 
     <android.support.design.widget.BottomNavigationView
-        android:id="@+id/bottom_nav"
+        android:id="@+id/navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        app:menu="@menu/menu_navigation">
+        app:menu="@menu/menu_navigation"
+        >
 
     </android.support.design.widget.BottomNavigationView>
 </android.support.design.widget.CoordinatorLayout>
