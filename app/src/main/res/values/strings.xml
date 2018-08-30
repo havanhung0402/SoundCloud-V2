@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Music_31</string>
+    <string name="title_color">Setting color</string>
+    <string name="title_my_music">My music</string>
+    <string name="title_discover">Discover</string>
+    <string name="title_more">More</string>
+    <string name="text_hint_search">Search for songs</string>
 </resources>
