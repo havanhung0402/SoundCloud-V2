@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,12 +13,6 @@ import java.util.List;
  */
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
-    public static final int MY_MUSIC_FRAGMENT = 0;
-    public static final int DISCOVER_FRAGMENT = 1;
-    public static final int MORE_FRAGMENT = 2;
-    public static final int TOTAL_FRAGMENT = 3;
-    List<Fragment> mFlagmentList = new ArrayList<>();
-    List<String> mFlagmentTitleList = new ArrayList<>();
 
     public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -26,11 +21,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position){
-            case MY_MUSIC_FRAGMENT:
+            case 0:
                 return MyMuiscFragment.newInstance();
-            case DISCOVER_FRAGMENT:
+            case 1:
                 return DiscoverFragment.newInstance();
-            case MORE_FRAGMENT:
+            case 2:
                 return MoreFragment.newInstance();
             default:
                 return null;
@@ -39,6 +34,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return TOTAL_FRAGMENT;
+        return 3;
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        super.destroyItem(container, position, object);
     }
 }

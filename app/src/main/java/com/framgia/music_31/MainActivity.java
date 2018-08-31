@@ -65,12 +65,12 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        mBottomNavigationView.getMenu().getItem(position).setChecked(true);
+
     }
 
     @Override
     public void onPageSelected(int position) {
-
+        mBottomNavigationView.getMenu().getItem(position).setChecked(true);
     }
 
     @Override

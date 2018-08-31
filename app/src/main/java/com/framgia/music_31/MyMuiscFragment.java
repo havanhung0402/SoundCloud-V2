@@ -16,6 +16,8 @@ public class MyMuiscFragment extends Fragment {
         return myMuiscFragment;
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
