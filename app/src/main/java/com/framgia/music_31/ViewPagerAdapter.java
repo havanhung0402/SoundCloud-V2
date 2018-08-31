@@ -13,6 +13,10 @@ import java.util.List;
  */
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
+    public static final int MY_MUSIC_FRAGMENT = 0;
+    public static final int DISCOVER_FRAGMENT = 1;
+    public static final int MORE_FRAGMENT = 2;
+    public static final int TOTAL_FRAGMENT = 3;
 
     public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -21,11 +25,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position){
-            case 0:
+            case MY_MUSIC_FRAGMENT:
                 return MyMuiscFragment.newInstance();
-            case 1:
+            case DISCOVER_FRAGMENT:
                 return DiscoverFragment.newInstance();
-            case 2:
+            case MORE_FRAGMENT:
                 return MoreFragment.newInstance();
             default:
                 return null;
@@ -34,7 +38,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return TOTAL_FRAGMENT;
     }
 
     @Override
