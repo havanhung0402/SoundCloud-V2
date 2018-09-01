@@ -55,7 +55,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
             mImageItem.setImageResource(Integer.parseInt(song.getUrlImage()));
             mImageMenu.setImageResource(R.drawable.ic_more_vert_gray_24dp);
         }
-
     }
 
     @Override

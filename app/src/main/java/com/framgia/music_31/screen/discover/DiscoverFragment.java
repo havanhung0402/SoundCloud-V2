@@ -5,9 +5,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import com.framgia.music_31.R;
 import com.framgia.music_31.data.model.Genre;
 import com.framgia.music_31.data.model.Playlist;
@@ -19,9 +21,10 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DiscoverFragment extends Fragment {
+public class DiscoverFragment extends Fragment implements DiscoverContract.View{
 
     private RecyclerView mRecyclerView;
+    private DiscoverContract.Presenter mPresenter;
 
     public static DiscoverFragment newInstance() {
         DiscoverFragment discoverFragment = new DiscoverFragment();
@@ -59,4 +62,22 @@ public class DiscoverFragment extends Fragment {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
     }
+
+    @Override
+    public void setPresenter(DiscoverContract.Presenter presenter) {
+        mPresenter = presenter;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.start();
+        Log.d("onResume", mPresenter+"");
+    }
+
+    @Override
+    public void showPlaylist(List<Playlist> playlists) {
+
+    }
+
 }

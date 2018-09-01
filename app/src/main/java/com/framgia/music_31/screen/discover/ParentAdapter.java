@@ -24,8 +24,8 @@ public class ParentAdapter extends RecyclerView.Adapter<ParentAdapter.SuperPlayl
     private List<Parent> mParents;
     private View itemView;
 
-    public ParentAdapter(List<Parent> playlists) {
-        mParents = playlists;
+    public ParentAdapter(List<Parent> parents) {
+        mParents = parents;
     }
 
     @Override
