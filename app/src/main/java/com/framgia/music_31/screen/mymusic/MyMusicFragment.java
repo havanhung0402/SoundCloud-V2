@@ -1,19 +1,20 @@
-package com.framgia.music_31;
+package com.framgia.music_31.screen.mymusic;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.framgia.music_31.R;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyMuiscFragment extends Fragment {
+public class MyMusicFragment extends Fragment {
 
-    public static  MyMuiscFragment newInstance() {
-        MyMuiscFragment myMuiscFragment = new MyMuiscFragment();
-        return myMuiscFragment;
+    public static MyMusicFragment newInstance() {
+        MyMusicFragment myMusicFragment = new MyMusicFragment();
+        return myMusicFragment;
     }
 
     @Override

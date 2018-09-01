@@ -1,10 +1,11 @@
-package com.framgia.music_31;
+package com.framgia.music_31.screen.more;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.framgia.music_31.R;
 
 /**
  * A simple {@link Fragment} subclass.

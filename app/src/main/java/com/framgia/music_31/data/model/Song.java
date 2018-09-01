@@ -1,4 +1,4 @@
-package com.framgia.music_31.model;
+package com.framgia.music_31.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
