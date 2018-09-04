@@ -4,4 +4,6 @@
     <color name="color_primary_dark">#303F9F</color>
     <color name="color_accent">#FF4081</color>
     <color name="color_gray">#757575</color>
+    <color name="color_black">#212121</color>
+    <color name="color_text_title_genre_white">#FFFFFF</color>
 </resources>
