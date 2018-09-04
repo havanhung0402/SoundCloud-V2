@@ -10,8 +10,7 @@ import com.framgia.music_31.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyMusicFragment extends Fragment {
-
+public class MyMusicFragment extends Fragment{
     public static MyMusicFragment newInstance() {
         MyMusicFragment myMusicFragment = new MyMusicFragment();
         return myMusicFragment;

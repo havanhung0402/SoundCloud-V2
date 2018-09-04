@@ -1,4 +1,4 @@
-package com.framgia.music_31.screen;
+package com.framgia.music_31.main;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

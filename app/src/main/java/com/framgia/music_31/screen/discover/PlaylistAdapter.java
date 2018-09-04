@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.framgia.music_31.R;
 import com.framgia.music_31.data.model.Playlist;
+import com.squareup.picasso.Picasso;
 import java.util.List;
 
 /**
@@ -17,6 +18,7 @@ import java.util.List;
 public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder> {
 
     private List<Playlist> mPlaylists;
+    private View itemView;
 
     public PlaylistAdapter(List<Playlist> playlists) {
         mPlaylists = playlists;
@@ -24,7 +26,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
 
     @Override
     public PlaylistViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
+        itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_playlist, parent, false);
         return new PlaylistViewHolder(itemView);
     }
@@ -52,7 +54,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
 
         private void fillData(Playlist playlist) {
             mTextTitle.setText(playlist.getTitle());
-            mImageItem.setImageResource(Integer.parseInt(playlist.getUrlImage()));
+            Picasso.with(itemView.getContext()).load(playlist.getUrlImage()).into(mImageItem);
         }
     }
 }
