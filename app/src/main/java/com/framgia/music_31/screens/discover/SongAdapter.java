@@ -1,6 +1,5 @@
-package com.framgia.music_31.adapter;
+package com.framgia.music_31.screens.discover;
 
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,18 +7,19 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.framgia.music_31.R;
-import com.framgia.music_31.model.Song;
+import com.framgia.music_31.data.model.Song;
 import java.util.List;
 
 /**
  * Created by hungdev on 24/07/2018.
  */
 
-public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongViewHolder> {
+public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder> {
 
+    //private SongItemListener mSongItemListener;
     private List<Song> mSongs;
 
-    public SongsAdapter(List songs) {
+    public SongAdapter(List songs) {
         mSongs = songs;
     }
 

@@ -1,4 +1,4 @@
-package com.framgia.music_31.model;
+package com.framgia.music_31.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -110,4 +110,15 @@ public class Song implements Parcelable {
             return new Song[size];
         }
     };
+
+    public static class JsonTrackKey {
+        public static final String ID = "id";
+        public static final String TITLE = "title";
+        public static final String URI = "url";
+        public static final String ARTWORK_URL = "artwork_url";
+        public static final String DURATION = "duration";
+        public static final String GENRE = "genre";
+        public static final String DOWNLOADABLE = "downloadable";
+        public static final String DOWNLOAD_URL = "download_url";
+    }
 }

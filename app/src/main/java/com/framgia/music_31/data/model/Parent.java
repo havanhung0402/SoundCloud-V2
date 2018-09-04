@@ -1,4 +1,4 @@
-package com.framgia.music_31.model;
+package com.framgia.music_31.data.model;
 
 import android.support.annotation.StringDef;
 import android.support.annotation.StringRes;

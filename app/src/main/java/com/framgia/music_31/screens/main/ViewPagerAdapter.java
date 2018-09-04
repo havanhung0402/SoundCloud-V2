@@ -1,11 +1,11 @@
-package com.framgia.music_31;
+package com.framgia.music_31.screens.main;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.framgia.music_31.screens.discover.DiscoverFragment;
+import com.framgia.music_31.screens.more.MoreFragment;
+import com.framgia.music_31.screens.mymusic.MyMusicFragment;
 
 /**
  * Created by hungdev on 30/08/2018.
@@ -25,7 +25,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position){
             case MY_MUSIC_FRAGMENT:
-                return MyMuiscFragment.newInstance();
+                return MyMusicFragment.newInstance();
             case DISCOVER_FRAGMENT:
                 return DiscoverFragment.newInstance();
             case MORE_FRAGMENT:

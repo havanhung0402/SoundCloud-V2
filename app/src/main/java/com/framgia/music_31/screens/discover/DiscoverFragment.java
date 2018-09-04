@@ -1,4 +1,4 @@
-package com.framgia.music_31;
+package com.framgia.music_31.screens.discover;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,11 +8,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.framgia.music_31.adapter.ParentAdapter;
-import com.framgia.music_31.model.Genre;
-import com.framgia.music_31.model.Parent;
-import com.framgia.music_31.model.Playlist;
-import com.framgia.music_31.model.Song;
+import com.framgia.music_31.R;
+import com.framgia.music_31.data.model.Genre;
+import com.framgia.music_31.data.model.Playlist;
+import com.framgia.music_31.data.model.Song;
+import com.framgia.music_31.data.model.Parent;
 import java.util.ArrayList;
 import java.util.List;
 
