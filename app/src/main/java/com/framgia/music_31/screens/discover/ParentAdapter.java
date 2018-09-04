@@ -1,6 +1,5 @@
-package com.framgia.music_31.adapter;
+package com.framgia.music_31.screens.discover;
 
-import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.framgia.music_31.R;
-import com.framgia.music_31.model.Parent;
+import com.framgia.music_31.data.model.Parent;
 import java.util.List;
 
 /**
@@ -68,7 +67,7 @@ public class ParentAdapter extends RecyclerView.Adapter<ParentAdapter.SuperPlayl
                 mLayoutManager =
                         new LinearLayoutManager(itemView.getContext(), LinearLayoutManager.VERTICAL, true);
                 holder.fillData(mParents.get(position), mLayoutManager,
-                        new SongsAdapter(mParents.get(position).getPlaylists()), View.VISIBLE);
+                        new SongAdapter(mParents.get(position).getPlaylists()), View.VISIBLE);
                 break;
         }
     }
