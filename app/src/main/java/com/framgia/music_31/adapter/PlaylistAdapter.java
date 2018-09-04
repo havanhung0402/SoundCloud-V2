@@ -52,7 +52,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
 
         private void fillData(Playlist playlist) {
             mTextTitle.setText(playlist.getTitle());
-            mImageItem.setImageResource(Integer.parseInt(playlist.getUrl_image()));
+            mImageItem.setImageResource(Integer.parseInt(playlist.getUrlImage()));
         }
     }
 }
