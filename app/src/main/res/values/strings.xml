@@ -8,4 +8,5 @@
     <string name="text_playlist">PLAYLIST</string>
     <string name="text_genres">GENRES</string>
     <string name="text_songs">SONGS</string>
+    <string name="text_view_more">View more</string>
 </resources>
