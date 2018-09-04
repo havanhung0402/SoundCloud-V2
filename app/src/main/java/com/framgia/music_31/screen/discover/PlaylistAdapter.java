@@ -1,4 +1,4 @@
-package com.framgia.music_31.adapter;
+package com.framgia.music_31.screen.discover;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.framgia.music_31.R;
-import com.framgia.music_31.model.Playlist;
+import com.framgia.music_31.data.model.Playlist;
 import java.util.List;
 
 /**
