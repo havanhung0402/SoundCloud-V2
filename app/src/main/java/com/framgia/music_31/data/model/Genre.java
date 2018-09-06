@@ -1,5 +1,7 @@
 package com.framgia.music_31.data.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.StringDef;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -8,7 +10,7 @@ import java.lang.annotation.RetentionPolicy;
  * Created by hungdev on 01/09/2018.
  */
 
-public class Genre {
+public class Genre implements Parcelable{
     public static final String ALL_MUSIC= "ALL MUSIC";
     public static final String ALL_AUDIO= "ALL AUDIO";
     public static final String ALTERNATIVE_ROCK = "ALTERNATIVE ROCK";
@@ -44,6 +46,12 @@ public class Genre {
         mParamGenre = paramGenre;
     }
 
+    protected Genre(Parcel in) {
+        mTitle = in.readString();
+        mImage = in.readInt();
+        mParamGenre = in.readString();
+    }
+
     public String getTitle() {
         return mTitle;
     }
@@ -67,4 +75,28 @@ public class Genre {
     public void setParamGenre(@ParamGenre String paramGenre) {
         mParamGenre = paramGenre;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mTitle);
+        dest.writeInt(mImage);
+        dest.writeString(mParamGenre);
+    }
+
+    public static final Creator<Genre> CREATOR = new Creator<Genre>() {
+        @Override
+        public Genre createFromParcel(Parcel source) {
+            return new Genre(source);
+        }
+
+        @Override
+        public Genre[] newArray(int size) {
+            return new Genre[size];
+        }
+    };
 }

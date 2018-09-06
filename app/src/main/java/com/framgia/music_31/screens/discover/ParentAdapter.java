@@ -13,6 +13,7 @@ import com.framgia.music_31.data.model.Parent;
 import com.framgia.music_31.data.model.Playlist;
 import com.framgia.music_31.data.model.Song;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -24,15 +25,18 @@ public class ParentAdapter extends RecyclerView.Adapter<ParentAdapter.SuperPlayl
     private static final int TYPE_GENRES = 1;
     private static final int TYPE_SONGS = 2;
     private static final int SPAN_COUNT = 2;
+    private static final int DEFAULT_POSITON = 0;
 
     private List<Parent> mParents;
     private List<Playlist> mPlaylists;
     private List<Genre> mGenres;
     private List<Song> mSongs;
     private View itemView;
+    private GenreAdapter.OnGenreItemClickListener mClickListener;
 
-    public ParentAdapter(List<Parent> parents) {
+    public ParentAdapter(GenreAdapter.OnGenreItemClickListener clickListener, List<Parent> parents) {
         mParents = parents;
+        mClickListener = clickListener;
         mPlaylists = new ArrayList<>();
         mGenres = new ArrayList<>();
     }
@@ -70,7 +74,7 @@ public class ParentAdapter extends RecyclerView.Adapter<ParentAdapter.SuperPlayl
             case TYPE_GENRES:
                 mLayoutManager = new GridLayoutManager(itemView.getContext(), SPAN_COUNT);
                 holder.fillData(mParents.get(position), mLayoutManager,
-                        new GenreAdapter(mGenres), View.GONE);
+                        new GenreAdapter(mGenres, mClickListener), View.GONE);
                 break;
             case TYPE_SONGS:
                 mLayoutManager =
@@ -99,7 +103,8 @@ public class ParentAdapter extends RecyclerView.Adapter<ParentAdapter.SuperPlayl
             mTextViewMore = itemView.findViewById(R.id.text_view_more);
         }
 
-        private void fillData(Parent parent, RecyclerView.LayoutManager layoutManager, RecyclerView.Adapter adapter, int visibility){
+        private void fillData(Parent parent, RecyclerView.LayoutManager layoutManager,
+                RecyclerView.Adapter adapter, int visibility) {
             mTextTitle.setText(parent.getTitle());
             mRecyclerView.setLayoutManager(layoutManager);
             mTextViewMore.setVisibility(visibility);
@@ -107,13 +112,12 @@ public class ParentAdapter extends RecyclerView.Adapter<ParentAdapter.SuperPlayl
         }
     }
 
-    public void addDataPlaylist(List<Playlist> playlists){
-        mPlaylists.addAll(playlists);
-        notifyDataSetChanged();
-    }
-
-    public void addDataGenre(List<Genre> genres){
-        mGenres.addAll(genres);
+    public void addData(List datas) {
+        if (datas.get(DEFAULT_POSITON) instanceof Playlist){
+             mPlaylists.addAll(datas);
+        }else if(datas.get(DEFAULT_POSITON) instanceof Genre){
+            mGenres.addAll(datas);
+        }
         notifyDataSetChanged();
     }
 }

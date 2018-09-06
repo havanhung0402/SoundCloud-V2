@@ -1,5 +1,6 @@
 package com.framgia.music_31.data.source.remote;
 
+import android.util.Log;
 import com.framgia.music_31.BuildConfig;
 import com.framgia.music_31.data.source.CallBack;
 import com.framgia.music_31.data.source.DiscoverDataSource;
@@ -21,8 +22,10 @@ public class DiscoverRemoteDataSource implements DiscoverDataSource.RemoteDataSo
 
     @Override
     public void getPlaylists(CallBack callback) {
-        String url = Constants.BASE_URL
-                + Constants.SELECTION + "?" + Constants.CLIENT_ID + "="
+        String url = Constants.BASE_URL_V2
+                + Constants.SELECTION
+                + Constants.QUESTION_MARK
+                + Constants.CLIENT_ID
                 + BuildConfig.YOUR_API_KEY;
         new GetPlaylistFromUri(callback).execute(url);
     }
