@@ -32,4 +32,11 @@ public class Playlist {
     public void setUrlImage(String urlImage) {
         mUrlImage = urlImage;
     }
+
+    public static class JsonPlayistKey {
+        public static final String ID = "id";
+        public static final String TITLE = "title";
+        public static final String URI = "uri";
+        public static final String ARTWORK_URL = "artwork_url";
+    }
 }

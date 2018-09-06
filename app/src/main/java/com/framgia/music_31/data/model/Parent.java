@@ -20,14 +20,12 @@ public class Parent<T> {
     public @interface Title {}
 
     private String mTitle;
-    private List<T> mPlaylists;
 
     public Parent() {
     }
 
-    public Parent(@Title String title, List<T> playlists) {
+    public Parent(@Title String title) {
         mTitle = title;
-        mPlaylists = playlists;
     }
 
     @Title
@@ -37,13 +35,5 @@ public class Parent<T> {
 
     public void setTitle(@Title String title) {
         mTitle = title;
-    }
-
-    public List<T> getPlaylists() {
-        return mPlaylists;
-    }
-
-    public void setPlaylists(List<T> playlists) {
-        mPlaylists = playlists;
     }
 }

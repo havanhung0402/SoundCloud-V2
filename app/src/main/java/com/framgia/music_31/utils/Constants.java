@@ -7,7 +7,11 @@ package com.framgia.music_31.utils;
 public class Constants {
 
     //api
-    public static final String BASE_URL = "https://api.soundcloud.com/";
+    public static final String BASE_URL = "https://api-v2.soundcloud.com/";
+    public static final String CLIENT_ID = "client_id";
     public static final String TRACKS = "tracks";
-    public static final String PLAYLIST = "playlists?q=mrsiro";
+    public static final String CHARTS = "charts";
+    public static final String SELECTION = "selections";
+    public static final String PARAM_KIND = "kind=top";
+    public static final String PARAM_GENRE = "genre=soundcloud%3Agenres%3A";
 }

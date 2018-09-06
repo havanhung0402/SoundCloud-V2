@@ -8,7 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.framgia.music_31.R;
+import com.framgia.music_31.data.model.Genre;
 import com.framgia.music_31.data.model.Parent;
+import com.framgia.music_31.data.model.Playlist;
+import com.framgia.music_31.data.model.Song;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,10 +26,14 @@ public class ParentAdapter extends RecyclerView.Adapter<ParentAdapter.SuperPlayl
     private static final int SPAN_COUNT = 2;
 
     private List<Parent> mParents;
+    private List<Playlist> mPlaylists;
+    private List<Genre> mGenres;
+    private List<Song> mSongs;
     private View itemView;
 
     public ParentAdapter(List<Parent> playlists) {
         mParents = playlists;
+        mPlaylists = new ArrayList<>();
     }
 
     @Override
@@ -56,18 +64,18 @@ public class ParentAdapter extends RecyclerView.Adapter<ParentAdapter.SuperPlayl
                 mLayoutManager =
                         new LinearLayoutManager(itemView.getContext(), LinearLayoutManager.HORIZONTAL, true);
                 holder.fillData(mParents.get(position), mLayoutManager,
-                        new PlaylistAdapter(mParents.get(position).getPlaylists()), View.VISIBLE);
+                        new PlaylistAdapter(mPlaylists), View.VISIBLE);
                 break;
             case TYPE_GENRES:
                 mLayoutManager = new GridLayoutManager(itemView.getContext(), SPAN_COUNT);
                 holder.fillData(mParents.get(position), mLayoutManager,
-                        new GenreAdapter(mParents.get(position).getPlaylists()), View.GONE);
+                        new GenreAdapter(mGenres), View.GONE);
                 break;
             case TYPE_SONGS:
                 mLayoutManager =
                         new LinearLayoutManager(itemView.getContext(), LinearLayoutManager.VERTICAL, true);
                 holder.fillData(mParents.get(position), mLayoutManager,
-                        new SongAdapter(mParents.get(position).getPlaylists()), View.VISIBLE);
+                        new SongAdapter(mSongs), View.VISIBLE);
                 break;
         }
     }
@@ -96,5 +104,10 @@ public class ParentAdapter extends RecyclerView.Adapter<ParentAdapter.SuperPlayl
             mTextViewMore.setVisibility(visibility);
             mRecyclerView.setAdapter(adapter);
         }
+    }
+
+    public void addDataPlaylist(List<Playlist> playlists){
+        mPlaylists.addAll(playlists);
+        notifyDataSetChanged();
     }
 }
