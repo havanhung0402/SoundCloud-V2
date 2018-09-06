@@ -2,7 +2,6 @@ package com.framgia.music_31.screens.main;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -10,12 +9,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import com.framgia.music_31.R;
-import com.framgia.music_31.data.repository.PlaylistRepository;
-import com.framgia.music_31.data.source.local.PlaylistLocalDataSource;
-import com.framgia.music_31.data.source.remote.PlaylistRemoteDataSource;
-import com.framgia.music_31.screens.discover.DiscoverContract;
 import com.framgia.music_31.screens.discover.DiscoverFragment;
-import com.framgia.music_31.screens.discover.DiscoverPresenter;
 
 public class MainActivity extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener {

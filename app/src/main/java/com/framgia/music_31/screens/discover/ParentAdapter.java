@@ -31,9 +31,10 @@ public class ParentAdapter extends RecyclerView.Adapter<ParentAdapter.SuperPlayl
     private List<Song> mSongs;
     private View itemView;
 
-    public ParentAdapter(List<Parent> playlists) {
-        mParents = playlists;
+    public ParentAdapter(List<Parent> parents) {
+        mParents = parents;
         mPlaylists = new ArrayList<>();
+        mGenres = new ArrayList<>();
     }
 
     @Override
@@ -108,6 +109,11 @@ public class ParentAdapter extends RecyclerView.Adapter<ParentAdapter.SuperPlayl
 
     public void addDataPlaylist(List<Playlist> playlists){
         mPlaylists.addAll(playlists);
+        notifyDataSetChanged();
+    }
+
+    public void addDataGenre(List<Genre> genres){
+        mGenres.addAll(genres);
         notifyDataSetChanged();
     }
 }
