@@ -1,5 +1,6 @@
 package com.framgia.music_31.screens.discover;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,13 +16,15 @@ import com.framgia.music_31.data.model.Parent;
 import com.framgia.music_31.data.repository.DiscoverRepository;
 import com.framgia.music_31.data.source.local.DiscoverLocalDataSource;
 import com.framgia.music_31.data.source.remote.DiscoverRemoteDataSource;
+import com.framgia.music_31.screens.song.SongActivity;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DiscoverFragment extends Fragment implements DiscoverContract.View {
+public class DiscoverFragment extends Fragment implements DiscoverContract.View,
+        GenreAdapter.OnGenreItemClickListener {
 
     private RecyclerView mRecyclerView;
     private DiscoverContract.Presenter mPresenter;
@@ -52,7 +55,7 @@ public class DiscoverFragment extends Fragment implements DiscoverContract.View 
     }
 
     private void setAdapter(List<Parent> parents) {
-        mParentAdapter = new ParentAdapter(parents);
+        mParentAdapter = new ParentAdapter(this, parents);
         mRecyclerView.setAdapter(mParentAdapter);
     }
 
@@ -73,7 +76,7 @@ public class DiscoverFragment extends Fragment implements DiscoverContract.View 
 
     @Override
     public void onGetPlayListSuccess(List<Playlist> playlists) {
-        mParentAdapter.addDataPlaylist(playlists);
+        mParentAdapter.addData(playlists);
     }
 
     @Override
@@ -83,6 +86,11 @@ public class DiscoverFragment extends Fragment implements DiscoverContract.View 
 
     @Override
     public void onGetGenreSuccess(List<Genre> genres) {
-        mParentAdapter.addDataGenre(genres);
+        mParentAdapter.addData(genres);
+    }
+
+    @Override
+    public void onGenreClick(Genre genre) {
+        startActivity(SongActivity.getPlaylistIntent(getActivity(), genre));
     }
 }

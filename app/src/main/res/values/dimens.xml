@@ -19,4 +19,5 @@
     <dimen name="dp_200">200dp</dimen>
     <dimen name="dp_40">40dp</dimen>
     <dimen name="dp_72">72dp</dimen>
+    <dimen name="dp_256">256dp</dimen>
 </resources>

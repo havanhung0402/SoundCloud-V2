@@ -16,16 +16,18 @@ import java.util.List;
 
 public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHolder> {
     private List<Genre> mGenres;
+    private OnGenreItemClickListener mClickListener;
 
-    public GenreAdapter(List genres) {
+    public GenreAdapter(List<Genre> genres, OnGenreItemClickListener clickListener) {
         mGenres = genres;
+        mClickListener = clickListener;
     }
 
     @Override
     public GenreViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_genre, parent, false);
-        return new GenreViewHolder(itemView);
+        return new GenreViewHolder(itemView, mGenres, mClickListener);
     }
 
     @Override
@@ -38,21 +40,39 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
         return mGenres == null ? 0 : mGenres.size();
     }
 
-    public static class GenreViewHolder extends RecyclerView.ViewHolder {
+    interface OnGenreItemClickListener {
+        void onGenreClick(Genre genre);
+    }
 
+    public static class GenreViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
+
+        private OnGenreItemClickListener mClickListener;
         private TextView mTextGenreName;
         private ImageView mImageGenre;
+        private List<Genre> mGenres;
 
-        public GenreViewHolder(View itemView) {
+        public GenreViewHolder(View itemView, List<Genre> genres,
+                OnGenreItemClickListener clickListener) {
             super(itemView);
             mTextGenreName = itemView.findViewById(R.id.text_genre_name);
             mImageGenre = itemView.findViewById(R.id.image_genre);
+            mClickListener = clickListener;
+            mGenres = genres;
+            itemView.setOnClickListener(this);
         }
 
         private void fillData(Genre genre) {
-            if(genre != null){
+            if (genre != null) {
                 mTextGenreName.setText(genre.getTitle());
                 mImageGenre.setImageResource(genre.getImage());
+            }
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (mClickListener != null) {
+                mClickListener.onGenreClick(mGenres.get(getAdapterPosition()));
             }
         }
     }
