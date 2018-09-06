@@ -13,15 +13,20 @@ import com.framgia.music_31.data.model.Genre;
 import com.framgia.music_31.data.model.Playlist;
 import com.framgia.music_31.data.model.Song;
 import com.framgia.music_31.data.model.Parent;
+import com.framgia.music_31.data.repository.PlaylistRepository;
+import com.framgia.music_31.data.source.local.PlaylistLocalDataSource;
+import com.framgia.music_31.data.source.remote.PlaylistRemoteDataSource;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DiscoverFragment extends Fragment {
+public class DiscoverFragment extends Fragment implements DiscoverContract.View {
 
     private RecyclerView mRecyclerView;
+    private DiscoverContract.Presenter mPresenter;
+    private ParentAdapter mParentAdapter;
 
     public static DiscoverFragment newInstance() {
         DiscoverFragment discoverFragment = new DiscoverFragment();
@@ -38,25 +43,37 @@ public class DiscoverFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
-        List<Parent> mParents = new ArrayList<>();
-        List<Playlist> mPlaylists = new ArrayList<>();
-        List<Song> mGenres = new ArrayList<>();
-        List<Genre>mSongs = new ArrayList<>();
+        mPresenter = new DiscoverPresenter(
+                PlaylistRepository.getInstance(PlaylistRemoteDataSource.getInstance(),
+                        PlaylistLocalDataSource.getInstance()));
+        mPresenter.setView(this);
+        List<Parent> parents = new ArrayList<>();
         setLayout();
-        setAdapter(mParents);
+        setAdapter(parents);
     }
 
     private void setAdapter(List<Parent> parents) {
-        ParentAdapter parentAdapter = new ParentAdapter(parents);
-        mRecyclerView.setAdapter(parentAdapter);
+        mParentAdapter = new ParentAdapter(parents);
+        mRecyclerView.setAdapter(mParentAdapter);
     }
 
     private void initView(View view) {
         mRecyclerView = view.findViewById(R.id.recycler_view);
     }
 
-    private void setLayout(){
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
+    private void setLayout() {
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(layoutManager);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mPresenter.start();
+    }
+
+    @Override
+    public void onGetPlayListSuccess(List<Playlist> playlists) {
+        mParentAdapter.addDataPlaylist(playlists);
     }
 }
