@@ -3,7 +3,8 @@ package com.framgia.music_31.data.source.remote;
 import android.os.AsyncTask;
 import com.framgia.music_31.data.model.Playlist;
 import com.framgia.music_31.data.model.Song;
-import com.framgia.music_31.data.source.PlaylistDataSource;
+import com.framgia.music_31.data.source.CallBack;
+import com.framgia.music_31.data.source.DiscoverDataSource;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -25,9 +26,9 @@ public class GetPlaylistFromUri extends AsyncTask<String, Void, List<Playlist>> 
     private static final String PLAYLISTS = "playlists";
     private static final int POSITION = 2;
     private Exception mException;
-    private PlaylistDataSource.LoadPlaylistCallback mCallback;
+    private CallBack mCallback;
 
-    public GetPlaylistFromUri(PlaylistDataSource.LoadPlaylistCallback callback) {
+    public GetPlaylistFromUri(CallBack callback) {
         mCallback = callback;
     }
 
@@ -55,13 +56,13 @@ public class GetPlaylistFromUri extends AsyncTask<String, Void, List<Playlist>> 
     @Override
     protected void onPostExecute(List<Playlist> playlists) {
         super.onPostExecute(playlists);
-        if (mException == null) {
+        if (mException != null) {
             mCallback.onError(mException);
         }
         if (!playlists.isEmpty()) {
-            mCallback.onPlaylistLoaded(playlists);
+            mCallback.onSusscess(playlists);
         } else {
-            mCallback.onDataNotAvailable();
+            mCallback.onError(mException);
         }
     }
 

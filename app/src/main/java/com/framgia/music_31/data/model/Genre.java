@@ -38,7 +38,7 @@ public class Genre {
     public Genre() {
     }
 
-    public Genre(String title, int image, String paramGenre) {
+    public Genre(@Title String title, int image, @ParamGenre String paramGenre) {
         mTitle = title;
         mImage = image;
         mParamGenre = paramGenre;

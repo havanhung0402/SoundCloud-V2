@@ -11,11 +11,10 @@ import android.view.ViewGroup;
 import com.framgia.music_31.R;
 import com.framgia.music_31.data.model.Genre;
 import com.framgia.music_31.data.model.Playlist;
-import com.framgia.music_31.data.model.Song;
 import com.framgia.music_31.data.model.Parent;
-import com.framgia.music_31.data.repository.PlaylistRepository;
-import com.framgia.music_31.data.source.local.PlaylistLocalDataSource;
-import com.framgia.music_31.data.source.remote.PlaylistRemoteDataSource;
+import com.framgia.music_31.data.repository.DiscoverRepository;
+import com.framgia.music_31.data.source.local.DiscoverLocalDataSource;
+import com.framgia.music_31.data.source.remote.DiscoverRemoteDataSource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,8 +43,8 @@ public class DiscoverFragment extends Fragment implements DiscoverContract.View 
         super.onViewCreated(view, savedInstanceState);
         initView(view);
         mPresenter = new DiscoverPresenter(
-                PlaylistRepository.getInstance(PlaylistRemoteDataSource.getInstance(),
-                        PlaylistLocalDataSource.getInstance()));
+                DiscoverRepository.getInstance(DiscoverRemoteDataSource.getInstance(),
+                        DiscoverLocalDataSource.getInstance()));
         mPresenter.setView(this);
         List<Parent> parents = new ArrayList<>();
         setLayout();
@@ -75,5 +74,15 @@ public class DiscoverFragment extends Fragment implements DiscoverContract.View 
     @Override
     public void onGetPlayListSuccess(List<Playlist> playlists) {
         mParentAdapter.addDataPlaylist(playlists);
+    }
+
+    @Override
+    public void onGetDataError(Exception e) {
+
+    }
+
+    @Override
+    public void onGetGenreSuccess(List<Genre> genres) {
+        mParentAdapter.addDataGenre(genres);
     }
 }
