@@ -20,4 +20,21 @@ public class Constants {
     public static final String SLASH = "/";
     public static final String AMPERSAND = "&";
     public static final String SLASH_N = "\n";
+
+    public static final String ACTION_NEXT = "com.framgia.music_31.ACTION_NEXT";
+    public static final String ACTION_PREVIOUS = "com.framgia.music_31.ACTION_PREVIOUS";
+    public static final String ACTION_COMPLETE = "com.framgia.music_31.ACTION_COMPLETE";
+    public static final String ACTION_PLAY_CONTROL = "com.framgia.music_31.ACTION_PLAY_CONTROL";
+    public static final String ACTION_CLEAR = "com.framgia.music_31.ACTION_CLEAR";
+    public static final String ACTION_CURRENT_TIME_CHANGED = "com.framgia.music_31.ACTION_CURRENT_TIME_CHANGED";
+
+    public static long getCurrentTime(int progress, long total){
+        double currentTime = ((double)total / 100) * progress;
+        return (long) currentTime;
+    }
+
+    public static int getProgress(long currentTime, long total){
+        double progress = ((double)currentTime / total) * 100;
+        return (int) progress;
+    }
 }

@@ -20,4 +20,9 @@
     <dimen name="dp_40">40dp</dimen>
     <dimen name="dp_72">72dp</dimen>
     <dimen name="dp_256">256dp</dimen>
+    <dimen name="dp_215">215dp</dimen>
+    <dimen name="dp_12">12dp</dimen>
+    <dimen name="dp_76">76dp</dimen>
+    <dimen name="dp_355">355dp</dimen>
+    <dimen name="dp_108">108dp</dimen>
 </resources>

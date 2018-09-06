@@ -18,9 +18,14 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
         <activity android:name=".screens.song.SongActivity"/>
+        <activity android:name=".screens.player.PlayerActivity"
+            android:theme="@style/AppTheme"/>
 
+        <service
+            android:name=".service.MusicService"
+            android:enabled="true"
+            android:exported="false"/>
     </application>
 
 </manifest>

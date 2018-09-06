@@ -17,17 +17,20 @@ import java.util.List;
  */
 
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder> {
+
+    private SongItemClickListener mSongItemListener;
     private List<Song> mSongs;
 
-    public SongAdapter(List<Song> songs) {
+    public SongAdapter(List<Song> songs, SongItemClickListener songItemListener) {
         mSongs = new ArrayList<>();
+        this.mSongItemListener = songItemListener;
     }
 
     @Override
     public SongViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView =
                 LayoutInflater.from(parent.getContext()).inflate(R.layout.item_song, parent, false);
-        return new SongViewHolder(itemView);
+        return new SongViewHolder(itemView, mSongs, mSongItemListener);
     }
 
     @Override
@@ -35,19 +38,26 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
         return mSongs == null ? 0 : mSongs.size();
     }
 
-    public static class SongViewHolder extends RecyclerView.ViewHolder {
+    public static class SongViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
 
         private TextView mTextSongName;
         private TextView mTextSingerName;
         private ImageView mImageItem;
         private ImageView mImageMenu;
+        private SongItemClickListener mSongItemClickListener;
+        private List<Song> mSongs;
 
-        public SongViewHolder(View itemView) {
+        public SongViewHolder(View itemView, List<Song> songs,
+                SongItemClickListener songItemClickListener) {
             super(itemView);
             mTextSongName = itemView.findViewById(R.id.text_song);
             mTextSingerName = itemView.findViewById(R.id.text_artist);
             mImageItem = itemView.findViewById(R.id.image_song);
             mImageMenu = itemView.findViewById(R.id.image_menu);
+            mSongItemClickListener = songItemClickListener;
+            mSongs = songs;
+            itemView.setOnClickListener(this);
         }
 
         private void fillData(Song song) {
@@ -55,6 +65,12 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
             mTextSingerName.setText(song.getSingerName());
             Picasso.with(itemView.getContext()).load(song.getUrlImage()).into(mImageItem);
             mImageMenu.setImageResource(R.drawable.ic_more_vert_gray_24dp);
+        }
+
+        @Override
+        public void onClick(View v) {
+            mSongItemClickListener.onSongClick(mSongs.get(getAdapterPosition()),
+                    getAdapterPosition(), mSongs);
         }
     }
 
@@ -66,5 +82,9 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
     public void addDataSong(List<Song> songs) {
         mSongs.addAll(songs);
         notifyDataSetChanged();
+    }
+
+    public interface SongItemClickListener {
+        void onSongClick(Song song, int positon, List<Song> songs);
     }
 }

@@ -19,10 +19,13 @@ import com.framgia.music_31.data.repository.SongRepository;
 import com.framgia.music_31.data.source.local.SongLocalDataSource;
 import com.framgia.music_31.data.source.remote.SongRemoteDataSource;
 import com.framgia.music_31.screens.discover.DiscoverFragment;
+import com.framgia.music_31.screens.player.PlayerActivity;
+import com.framgia.music_31.service.MusicService;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SongActivity extends AppCompatActivity implements SongContract.View{
+public class SongActivity extends AppCompatActivity implements SongContract.View,
+        SongAdapter.SongItemClickListener{
 
     private static final String KEY_GENRE = "KEY_GENRE";
     private static final int IMAGE_DEFAULT = R.drawable.ic_ambient;
@@ -64,7 +67,7 @@ public class SongActivity extends AppCompatActivity implements SongContract.View
                 SongLocalDataSource.getInstance()), genre.getParamGenre());
         mPresenter.setView(this);
         List<Song> songs = new ArrayList<>();
-        mSongAdapter = new SongAdapter(songs);
+        mSongAdapter = new SongAdapter(songs, this);
         initView(genreParam);
     }
 
@@ -93,5 +96,11 @@ public class SongActivity extends AppCompatActivity implements SongContract.View
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSongClick(Song song, int positon, List<Song> songs) {
+        startActivity(PlayerActivity.getPlayerIntent(this, song, positon, songs));
+        startService(MusicService.getIntentService(this, songs, positon));
     }
 }
