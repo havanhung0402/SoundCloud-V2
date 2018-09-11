@@ -12,16 +12,18 @@ public class Song implements Parcelable {
     private String mSongName;
     private String mSingerName;
     private String mUrlImage;
+    private int mDuration;
     private String mUrl;
 
     public Song() {
     }
 
-    public Song(long id, String songName, String singerName, String urlImage, String uri) {
+    public Song(long id, String songName, String singerName, String urlImage, int duration, String uri) {
         mId = id;
         mSongName = songName;
         mSingerName = singerName;
         mUrlImage = urlImage;
+        mDuration = duration;
         mUrl = uri;
     }
 
@@ -30,20 +32,9 @@ public class Song implements Parcelable {
         mSongName = in.readString();
         mSingerName = in.readString();
         mUrlImage = in.readString();
+        mDuration = in.readInt();
         mUrl = in.readString();
     }
-
-    public static final Creator<Song> SONG_CREATOR = new Creator<Song>() {
-        @Override
-        public Song createFromParcel(Parcel in) {
-            return new Song(in);
-        }
-
-        @Override
-        public Song[] newArray(int size) {
-            return new Song[size];
-        }
-    };
 
     public long getId() {
         return mId;
@@ -77,6 +68,14 @@ public class Song implements Parcelable {
         mUrlImage = urlImage;
     }
 
+    public int getDuration() {
+        return mDuration;
+    }
+
+    public void setDuration(int duration) {
+        mDuration = duration;
+    }
+
     public String getUrl() {
         return mUrl;
     }
@@ -96,6 +95,7 @@ public class Song implements Parcelable {
         dest.writeString(mSongName);
         dest.writeString(mSingerName);
         dest.writeString(mUrlImage);
+        dest.writeInt(mDuration);
         dest.writeString(mUrl);
     }
 

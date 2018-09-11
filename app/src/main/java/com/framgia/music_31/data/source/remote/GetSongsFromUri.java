@@ -76,7 +76,7 @@ public class GetSongsFromUri extends AsyncTask<String, Void, List<Song>> {
                 JSONObject track = jsonObject.getJSONObject(KEY_TRACK);
                 String uri_image = track.getString(Song.JsonTrackKey.ARTWORK_URL);
                 long id = track.getLong(Song.JsonTrackKey.ID);
-                long duration = track.getLong(Song.JsonTrackKey.DURATION);
+                int duration = track.getInt(Song.JsonTrackKey.DURATION);
                 String title = track.getString(Song.JsonTrackKey.TITLE);
                 String artist = track.getJSONObject(KEY_USER).getString(KEY_FULL_NAME);
                 String uri_stream = Constants.BASE_URL
@@ -88,7 +88,7 @@ public class GetSongsFromUri extends AsyncTask<String, Void, List<Song>> {
                         + Constants.QUESTION_MARK
                         + Constants.CLIENT_ID
                         + BuildConfig.YOUR_API_KEY;
-                songs.add(new Song(id, title, artist, uri_image, uri_stream));
+                songs.add(new Song(id, title, artist, uri_image, duration, uri_stream));
             } catch (JSONException e) {
                 mException = e;
             }

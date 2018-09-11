@@ -12,10 +12,6 @@ public interface PlayerMusicContract {
     interface View {
 
         void updateSong(Song song);
-
-        void updateSeekBar(int progress);
-
-        void updateCurrentTime(String currentTime);
     }
 
     interface Presenter extends BasePresenter<View>{
