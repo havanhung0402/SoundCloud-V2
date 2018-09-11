@@ -8,20 +8,18 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.framgia.music_31.R;
 import com.framgia.music_31.data.model.Song;
 import com.framgia.music_31.service.MusicService;
 import com.framgia.music_31.utils.Constants;
 import com.squareup.picasso.Picasso;
-import java.util.ArrayList;
-import java.util.List;
 
 public class PlayerMusicActivity extends AppCompatActivity
         implements PlayerMusicContract.View, View.OnClickListener, SeekBar.OnSeekBarChangeListener {
@@ -46,6 +44,7 @@ public class PlayerMusicActivity extends AppCompatActivity
     private TextView mTextViewTimeTotal;
     private PlayerMusicPresenter mPresenter;
     private MusicService mMusicService;
+    private BroadcastReceiver mBroadcastReceiver;
     private Boolean mIsBound;
     private Handler mHandler = new Handler();
 
@@ -67,7 +66,29 @@ public class PlayerMusicActivity extends AppCompatActivity
     protected void onStart() {
         bindService(MusicService.getIntentService(this, null, DEFAULT_POSITON), mServiceConnection,
                 BIND_AUTO_CREATE);
+        initBroadCast();
         super.onStart();
+    }
+
+    private void initBroadCast() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(MusicService.ACTION_PLAY_CONTROL);
+        intentFilter.addAction(MusicService.ACTION_SONG_CHANGED);
+        intentFilter.addAction(MusicService.ACTION_STATUS_MEDIA_PLAYER);
+        mBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                switch (intent.getAction()) {
+                    case MusicService.ACTION_SONG_CHANGED:
+                        updateSong(mMusicService.getCurrentSong());
+                        break;
+                    case MusicService.ACTION_STATUS_MEDIA_PLAYER:
+                        changePlayerControl();
+                        break;
+                }
+            }
+        };
+        registerReceiver(mBroadcastReceiver, intentFilter);
     }
 
     private void initComponents() {
@@ -113,14 +134,17 @@ public class PlayerMusicActivity extends AppCompatActivity
         public void onServiceConnected(ComponentName name, IBinder service) {
             MusicService.PlayerBinder binder = (MusicService.PlayerBinder) service;
             mMusicService = binder.getService();
-            updateTime();
             mIsBound = true;
+            updateTime();
+            changePlayerControl();
+            updateSong(mMusicService.getCurrentSong());
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
             mIsBound = false;
             mMusicService.unbindService(mServiceConnection);
+            mHandler.removeCallbacks(mRunnable);
         }
     };
 
@@ -128,6 +152,7 @@ public class PlayerMusicActivity extends AppCompatActivity
     protected void onStop() {
         if (mIsBound) {
             unbindService(mServiceConnection);
+            unregisterReceiver(mBroadcastReceiver);
             mIsBound = false;
         }
         super.onStop();
@@ -151,7 +176,7 @@ public class PlayerMusicActivity extends AppCompatActivity
                 nextMusic();
                 break;
             case R.id.image_player_control:
-                setPlayerControl();
+                changeMediaPlayerStatus();
                 break;
             case R.id.image_shuffle_controller:
                 changeSuffle();
@@ -175,13 +200,22 @@ public class PlayerMusicActivity extends AppCompatActivity
             int currentTime = mMusicService.getCurrentTime();
             int total = mMusicService.getCurrentSong().getDuration();
             int progress = (int) (((double) Constants.MAX_PROGRESS / total) * currentTime);
+            mMusicService.updateProgress(progress);
             mSeekBar.setProgress(progress);
             mTextViewCurrentTime.setText(getFormatString(currentTime));
             mHandler.postDelayed(this, DELAY_MILLIS);
         }
     };
 
-    private void setPlayerControl() {
+    private void changePlayerControl() {
+        if(mMusicService.isPlaying()){
+            mImageViewPlayerControl.setImageResource(R.drawable.ic_pause_white_48dp);
+        }else {
+            mImageViewPlayerControl.setImageResource(R.drawable.ic_play_arrow_white_48dp);
+        }
+    }
+
+    private void changeMediaPlayerStatus() {
         if (!mIsBound) {
             return;
         }
