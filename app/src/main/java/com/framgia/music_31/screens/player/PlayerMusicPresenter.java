@@ -8,7 +8,6 @@ public class PlayerMusicPresenter implements PlayerMusicContract.Presenter{
 
     private PlayerMusicContract.View mView;
 
-
     @Override
     public void start() {
 

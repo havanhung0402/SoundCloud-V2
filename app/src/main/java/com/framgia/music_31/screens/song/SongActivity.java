@@ -61,7 +61,7 @@ public class SongActivity extends AppCompatActivity implements SongContract.View
         mCollapsingToolbarLayout.setTitle(genre.getTitle());
         mImagePlaylist.setImageResource(genre.getImage());
         mPresenter = new SongPresenter(SongRepository.getsInstance(SongRemoteDataSource.getInstance(),
-                SongLocalDataSource.getInstance()), genre.getParamGenre());
+                SongLocalDataSource.getInstance(this)), genre.getParamGenre());
         mPresenter.setView(this);
         List<Song> songs = new ArrayList<>();
         mSongAdapter = new SongAdapter(songs, this);

@@ -18,13 +18,21 @@ public class Song implements Parcelable {
     public Song() {
     }
 
-    public Song(long id, String songName, String singerName, String urlImage, int duration, String uri) {
+    public Song(long id, String songName, String singerName, String urlImage,
+            int duration, String url) {
         mId = id;
         mSongName = songName;
         mSingerName = singerName;
         mUrlImage = urlImage;
         mDuration = duration;
-        mUrl = uri;
+        mUrl = url;
+    }
+
+    public Song(String songName, String singerName, int duration, String url) {
+        mSongName = songName;
+        mSingerName = singerName;
+        mDuration = duration;
+        mUrl = url;
     }
 
     protected Song(Parcel in) {

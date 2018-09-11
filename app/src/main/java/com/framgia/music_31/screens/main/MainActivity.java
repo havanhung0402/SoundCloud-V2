@@ -1,5 +1,6 @@
 package com.framgia.music_31.screens.main;
 
+import android.app.Fragment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -10,11 +11,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import com.framgia.music_31.R;
 import com.framgia.music_31.screens.discover.DiscoverFragment;
+import com.framgia.music_31.screens.mymusic.MyMusicFragment;
 
 public class MainActivity extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener {
     private BottomNavigationView mBottomNavigationView;
     private DiscoverFragment mDiscoverFragment;
+    private MyMusicFragment mMyMusicFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,21 +47,25 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        android.support.v4.app.Fragment fragment =null;
         switch (item.getItemId()) {
             case R.id.navigation_my_music:
+                if(fragment == null){
+                    fragment = MyMusicFragment.newInstance();
+                }
                 break;
             case R.id.navigation_discover:
-                if(mDiscoverFragment == null){
-                    mDiscoverFragment = DiscoverFragment.newInstance();
+                if(fragment == null){
+                    fragment = DiscoverFragment.newInstance();
                 }
                 break;
             case R.id.navigation_more:
                 break;
         }
-        return replaceFragment(mDiscoverFragment);
+        return replaceFragment(fragment);
     }
 
-    private boolean replaceFragment(DiscoverFragment fragment) {
+    private boolean replaceFragment(android.support.v4.app.Fragment fragment) {
         if (fragment != null){
             getSupportFragmentManager().beginTransaction().replace(R.id.view_container, fragment).commit();
             return true;
