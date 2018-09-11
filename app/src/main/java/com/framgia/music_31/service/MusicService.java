@@ -15,6 +15,7 @@ import android.os.Parcelable;
 import android.provider.SyncStateContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.widget.RemoteViews;
 import com.framgia.music_31.R;
 import com.framgia.music_31.data.model.Song;
