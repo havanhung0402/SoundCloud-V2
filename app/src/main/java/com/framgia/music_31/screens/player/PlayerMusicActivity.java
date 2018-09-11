@@ -6,26 +6,36 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.annotation.IntDef;
+import android.support.annotation.StringDef;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import com.framgia.music_31.R;
 import com.framgia.music_31.data.model.Song;
+import com.framgia.music_31.data.source.local.RepeatSharedPreferences;
+import com.framgia.music_31.data.source.local.ShuffleSharedPreferences;
 import com.framgia.music_31.service.DownloadTrackService;
 import com.framgia.music_31.service.MusicService;
 import com.framgia.music_31.utils.Constants;
 import com.squareup.picasso.Picasso;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerMusicActivity extends AppCompatActivity
-        implements PlayerMusicContract.View, View.OnClickListener, SeekBar.OnSeekBarChangeListener {
+        implements PlayerMusicContract.View, View.OnClickListener, SeekBar.OnSeekBarChangeListener,
+        CompoundButton.OnCheckedChangeListener {
 
     public static final String KEY_SONG = "song";
     public static final String KEY_POSITON = "position";
@@ -40,7 +50,7 @@ public class PlayerMusicActivity extends AppCompatActivity
     private ImageView mImageViewPlayerControl;
     private ImageView mImageViewNextController;
     private ImageView mImageViewPreviousController;
-    private ImageView mImageViewShuffleController;
+    private CheckBox mCheckBoxShuffle;
     private ImageView mImageViewRepeatController;
     private ImageView mImageViewDownload;
     private SeekBar mSeekBar;
@@ -51,6 +61,18 @@ public class PlayerMusicActivity extends AppCompatActivity
     private BroadcastReceiver mBroadcastReceiver;
     private Boolean mIsBound;
     private Handler mHandler = new Handler();
+    private SharedPreferences.Editor mEditorShuffle;
+    private SharedPreferences mPreferencesShuffle;
+    private SharedPreferences.Editor mEditorRepeat;
+    private SharedPreferences mPreferencesRepeat;
+    private int mLevelImage;
+    public static final int LEVEL_0 = 0;
+    public static final int LEVEL_1 = 1;
+    public static final int LEVEL_2 = 2;
+
+    @IntDef({LEVEL_0, LEVEL_1, LEVEL_2})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Level {}
 
     public static Intent getPlayerIntent(Context context, Song song) {
         Intent intent = new Intent(context, PlayerMusicActivity.class);
@@ -105,7 +127,7 @@ public class PlayerMusicActivity extends AppCompatActivity
         mImageViewPlayerControl = findViewById(R.id.image_player_control);
         mImageViewNextController = findViewById(R.id.image_next_controller);
         mImageViewPreviousController = findViewById(R.id.image_previous_controller);
-        mImageViewShuffleController = findViewById(R.id.image_shuffle_controller);
+        mCheckBoxShuffle = findViewById(R.id.image_shuffle_controller);
         mImageViewRepeatController = findViewById(R.id.image_repeat_controller);
         mImageViewDownload = findViewById(R.id.image_download);
     }
@@ -113,13 +135,19 @@ public class PlayerMusicActivity extends AppCompatActivity
     private void initData() {
         mPresenter = new PlayerMusicPresenter();
         mPresenter.setView(this);
+        mPreferencesShuffle = ShuffleSharedPreferences.getSharedPreferences(this);
+        mEditorShuffle = ShuffleSharedPreferences.getEditor(this);
+        mPreferencesRepeat = RepeatSharedPreferences.getSharedPreferences(this);
+        mEditorRepeat = RepeatSharedPreferences.getEditor(this);
         Song song = getIntent().getParcelableExtra(KEY_SONG);
         mTextViewTitle.setText(song.getSongName());
         mTextViewArtist.setText(song.getSingerName());
         mTextViewTimeTotal.setText(getFormatString(song.getDuration()));
         Picasso.with(this).load(song.getUrlImage()).into(mImageViewSong);
+        mCheckBoxShuffle.setChecked(mPreferencesShuffle.getBoolean(Constants.KEY_SHUFFLE, false));
+        mImageViewRepeatController.setImageLevel(mPreferencesRepeat.getInt(Constants.KEY_REPEAT, Constants.IMAGE_LEVEL_DEFAULT));
         mImageViewBackStack.setOnClickListener(this);
-        mImageViewShuffleController.setOnClickListener(this);
+        mCheckBoxShuffle.setOnCheckedChangeListener(this);
         mImageViewPreviousController.setOnClickListener(this);
         mImageViewPlayerControl.setOnClickListener(this);
         mImageViewNextController.setOnClickListener(this);
@@ -183,11 +211,8 @@ public class PlayerMusicActivity extends AppCompatActivity
             case R.id.image_player_control:
                 changeMediaPlayerStatus();
                 break;
-            case R.id.image_shuffle_controller:
-                changeSuffle();
-                break;
             case R.id.image_repeat_controller:
-                changeRepeat();
+                changeImageLevel();
                 break;
             case R.id.image_download:
                 downloadTrack();
@@ -240,10 +265,25 @@ public class PlayerMusicActivity extends AppCompatActivity
         }
     }
 
-    private void changeRepeat() {
+    private void changeImageLevel() {
+        if(mLevelImage == LEVEL_2){
+            mLevelImage = LEVEL_0;
+        }else {
+            mLevelImage++;
+        }
+        setRepeat(mLevelImage);
     }
 
-    private void changeSuffle() {
+    private void setRepeat(@Level int level) {
+        mImageViewRepeatController.setImageLevel(level);
+        mEditorRepeat.putInt(Constants.KEY_REPEAT, level);
+        mEditorRepeat.apply();
+    }
+
+    private void setShuffle(boolean isChecked) {
+        mEditorShuffle.putBoolean(Constants.KEY_SHUFFLE, isChecked);
+        mEditorShuffle.apply();
+        mMusicService.setShuffle(isChecked);
     }
 
     private void nextMusic() {
@@ -275,5 +315,11 @@ public class PlayerMusicActivity extends AppCompatActivity
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
 
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        Log.i("Shuffle", isChecked + "");
+        setShuffle(isChecked);
     }
 }

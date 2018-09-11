@@ -1,6 +1,5 @@
 package com.framgia.music_31.service;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -16,16 +15,18 @@ import android.os.Parcelable;
 import android.provider.SyncStateContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 import android.widget.RemoteViews;
 import com.framgia.music_31.R;
 import com.framgia.music_31.data.model.Song;
+import com.framgia.music_31.data.source.local.RepeatSharedPreferences;
+import com.framgia.music_31.data.source.local.ShuffleSharedPreferences;
 import com.framgia.music_31.screens.player.PlayerMusicActivity;
 import com.framgia.music_31.utils.Constants;
 import com.framgia.music_31.utils.Utils;
 import com.squareup.picasso.Picasso;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MusicService extends Service
@@ -47,6 +48,8 @@ public class MusicService extends Service
 
     private int mPos;
     private List<Song> mSongs;
+    private List<Song> mSongsShuffle;
+    private Song currentSong;
     private MediaPlayer mMediaPlayer;
     private RemoteViews mRemoteViews;
     private Intent mIntentPlayer;
@@ -54,6 +57,8 @@ public class MusicService extends Service
     private NotificationCompat.Builder mNotification;
     private NotificationManager mNotificationManager;
     private BroadcastReceiver mBroadcastReceiver;
+    private boolean mIsShuffle;
+    private boolean mIsItemClicked;
     private final IBinder mIBinder = new PlayerBinder();
 
     public MusicService() {
@@ -72,6 +77,14 @@ public class MusicService extends Service
     }
 
     public Song getCurrentSong() {
+        return currentSong;
+    }
+
+    public Song getSong() {
+        if (mIsShuffle && !mIsItemClicked) {
+            return mSongsShuffle.get(mPos);
+        }
+        mIsItemClicked = false;
         return mSongs.get(mPos);
     }
 
@@ -92,7 +105,13 @@ public class MusicService extends Service
     public int onStartCommand(Intent intent, int flags, int startId) {
         mPos = intent.getIntExtra(KEY_POSITON, DEFAULT_POSITON);
         mSongs = intent.getParcelableArrayListExtra(KEY_SONGS);
-        playMusic(mPos);
+        mIsItemClicked = true;
+        mSongsShuffle = new ArrayList<>();
+        mSongsShuffle.addAll(mSongs);
+        mIsShuffle = ShuffleSharedPreferences.getSharedPreferences(getApplication())
+                .getBoolean(Constants.KEY_SHUFFLE, false);
+        Collections.shuffle(mSongsShuffle);
+        playMusic();
         return START_NOT_STICKY;
     }
 
@@ -151,11 +170,11 @@ public class MusicService extends Service
         }
     }
 
-    private void playMusic(int postiton) {
-        Song song = mSongs.get(postiton);
+    private void playMusic() {
+        currentSong = getSong();
         try {
             mMediaPlayer.reset();
-            mMediaPlayer.setDataSource(song.getUrl());
+            mMediaPlayer.setDataSource(currentSong.getUrl());
             mMediaPlayer.prepareAsync();
         } catch (IOException e) {
             e.printStackTrace();
@@ -164,10 +183,9 @@ public class MusicService extends Service
     }
 
     private void showNotification() {
-        Song song = mSongs.get(mPos);
         mIntentPlayer = new Intent(this, PlayerMusicActivity.class);
         mIntentPlayer.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        mIntentPlayer.putExtra(PlayerMusicActivity.KEY_SONG, song);
+        mIntentPlayer.putExtra(PlayerMusicActivity.KEY_SONG, currentSong);
         mPendingIntent = PendingIntent.getActivity(this, REQUEST_CODE_OK, mIntentPlayer,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         mRemoteViews =
@@ -182,7 +200,7 @@ public class MusicService extends Service
                         .setCustomBigContentView(mRemoteViews)
                         .setCustomContentView(mRemoteViews)
                         .setContent(mRemoteViews);
-        initRemoteViews(song);
+        initRemoteViews(currentSong);
         setListenerNotification();
         startForeground(ID_NOTI, mNotification.build());
     }
@@ -216,14 +234,13 @@ public class MusicService extends Service
         String image = song.getUrlImage();
         mRemoteViews.setTextViewText(R.id.text_song, songTitle);
         mRemoteViews.setTextViewText(R.id.text_artist, artist);
-        if (image !=null){
+        if (image != null) {
             Picasso.with(getApplication())
                     .load(image)
                     .into(mRemoteViews, R.id.image_notification, ID_NOTI, mNotification.build());
-        }else {
+        } else {
             mRemoteViews.setImageViewResource(R.id.image_notification, R.mipmap.ic_launcher);
         }
-
     }
 
     public void updateProgress(int progress) {
@@ -252,7 +269,7 @@ public class MusicService extends Service
             mPos++;
         }
         mMediaPlayer.reset();
-        playMusic(mPos);
+        playMusic();
     }
 
     public void previous() {
@@ -262,18 +279,26 @@ public class MusicService extends Service
             mPos--;
         }
         mMediaPlayer.reset();
-        playMusic(mPos);
+        playMusic();
     }
 
     public void seekTo(int progress) {
-        int total = mSongs.get(mPos).getDuration();
+        int total = currentSong.getDuration();
         mMediaPlayer.seekTo(Utils.getCurrentTime(progress, total));
+    }
+
+    public void setShuffle(boolean isShuffle) {
+        mIsShuffle = isShuffle;
+        if (isShuffle) {
+            Collections.shuffle(mSongsShuffle);
+        }
     }
 
     @Override
     public void onPrepared(MediaPlayer mp) {
         mMediaPlayer.start();
         sendBroadcast(new Intent(ACTION_STATUS_MEDIA_PLAYER));
+        sendBroadcast(new Intent(ACTION_SONG_CHANGED));
     }
 
     @Override
@@ -284,8 +309,16 @@ public class MusicService extends Service
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        Intent intent = new Intent(ACTION_NEXT);
-        sendBroadcast(intent);
+        int typeRepeat = RepeatSharedPreferences.getSharedPreferences(getApplication()).getInt(Constants.KEY_REPEAT, Constants.IMAGE_LEVEL_DEFAULT);
+        if(typeRepeat == PlayerMusicActivity.LEVEL_0 && mPos == (mSongs.size() - 1)){
+            pause();
+            return;
+        }else if (typeRepeat == PlayerMusicActivity.LEVEL_2){
+            mPos--;
+            next();
+            return;
+        }
+        next();
     }
 
     public class PlayerBinder extends Binder {

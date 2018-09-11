@@ -82,16 +82,16 @@
         app:srcCompat="@drawable/ic_skip_next_white_48dp"
         tools:ignore="VectorDrawableCompat"
         />
-    <ImageView
+    <CheckBox
         android:id="@+id/image_shuffle_controller"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_12"
+        android:button="@drawable/btn_shuffle"
         app:layout_constraintEnd_toEndOf="@+id/image_previous_controller"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/image_previous_controller"
         app:layout_constraintHorizontal_bias="0.3"
-        app:srcCompat="@drawable/ic_shuffle_white_48dp"
         tools:ignore="VectorDrawableCompat"
         />
     <ImageView
@@ -99,12 +99,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_12"
+        android:src="@drawable/btn_repeat"
         app:layout_constraintStart_toStartOf="@id/image_next_controller"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.7"
         app:layout_constraintTop_toTopOf="@+id/image_next_controller"
-        app:srcCompat="@drawable/ic_repeat_white_24dp"
-        tools:ignore="VectorDrawableCompat"
         />
     <ImageView
         android:id="@+id/image_back_stack"

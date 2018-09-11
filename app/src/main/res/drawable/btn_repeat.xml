@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:maxLevel="0">
+        <selector
+            android:constantSize="true"
+            android:variablePadding="false">
+            <item>
+                <layer-list>
+                    <item   android:drawable="@drawable/ic_repeat_white_24dp"/>
+                </layer-list>
+            </item>
+        </selector>
+    </item>
+    <item
+        android:maxLevel="1">
+        <selector
+            android:constantSize="true"
+            android:variablePadding="false">
+            <item >
+                <layer-list>
+                    <item android:drawable="@drawable/ic_repeat_violet_24dp"/>
+                </layer-list>
+            </item>
+        </selector>
+    </item>
+    <item
+        android:maxLevel="2">
+        <selector
+            android:constantSize="true"
+            android:variablePadding="false">
+            <item >
+                <layer-list>
+                    <item android:drawable="@drawable/ic_repeat_one_while_24dp"/>
+                </layer-list>
+            </item>
+        </selector>
+    </item>
+</level-list>
