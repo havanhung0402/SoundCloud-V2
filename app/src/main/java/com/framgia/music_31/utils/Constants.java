@@ -28,4 +28,9 @@ public class Constants {
     public static final String ZERO = "0";
     public static final String COLON = ":";
     public static final String STORAGE_URL = "/sdcard/SoundCloud/";
+    public static final String PREF_SHUFFLE = "shuffle";
+    public static final String KEY_SHUFFLE = "isShuffle";
+    public static final String PREF_REPEAT = "repeat";
+    public static final String KEY_REPEAT = "key_repeat";
+    public static final int IMAGE_LEVEL_DEFAULT = 0;
 }

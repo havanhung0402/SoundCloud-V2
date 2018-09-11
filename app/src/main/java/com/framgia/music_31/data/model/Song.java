@@ -12,6 +12,7 @@ public class Song implements Parcelable {
     private String mSongName;
     private String mSingerName;
     private String mUrlImage;
+    private byte[] mByteImage;
     private int mDuration;
     private String mUrl;
 
@@ -40,6 +41,7 @@ public class Song implements Parcelable {
         mSongName = in.readString();
         mSingerName = in.readString();
         mUrlImage = in.readString();
+        mByteImage = in.createByteArray();
         mDuration = in.readInt();
         mUrl = in.readString();
     }
@@ -103,6 +105,7 @@ public class Song implements Parcelable {
         dest.writeString(mSongName);
         dest.writeString(mSingerName);
         dest.writeString(mUrlImage);
+        dest.writeByteArray(mByteImage);
         dest.writeInt(mDuration);
         dest.writeString(mUrl);
     }

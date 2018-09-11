@@ -1,6 +1,5 @@
 package com.framgia.music_31.screens.discover;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,8 +22,8 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DiscoverFragment extends Fragment implements DiscoverContract.View,
-        GenreAdapter.OnGenreItemClickListener {
+public class DiscoverFragment extends Fragment
+        implements DiscoverContract.View, GenreAdapter.OnGenreItemClickListener {
 
     private RecyclerView mRecyclerView;
     private DiscoverContract.Presenter mPresenter;
@@ -50,6 +49,8 @@ public class DiscoverFragment extends Fragment implements DiscoverContract.View,
                         DiscoverLocalDataSource.getInstance()));
         mPresenter.setView(this);
         List<Parent> parents = new ArrayList<>();
+        parents.add(new Parent(Parent.PLAY_LIST));
+        parents.add(new Parent(Parent.GENRES));
         setLayout();
         setAdapter(parents);
     }
