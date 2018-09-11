@@ -16,6 +16,7 @@ import android.os.Parcelable;
 import android.provider.SyncStateContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.widget.RemoteViews;
 import com.framgia.music_31.R;
 import com.framgia.music_31.data.model.Song;
@@ -33,7 +34,8 @@ public class MusicService extends Service
     public static final String ACTION_PREVIOUS = "com.framgia.music_31.ACTION_PREVIOUS";
     public static final String ACTION_PLAY_CONTROL = "com.framgia.music_31.ACTION_PLAY_CONTROL";
     public static final String ACTION_CLEAR = "com.framgia.music_31.ACTION_CLEAR";
-    public static final String ACTION_STATUS_MEDIA_PLAYER = "com.framgia.music_31.ACTION_STATUS_MEDIA_PLAYER";
+    public static final String ACTION_STATUS_MEDIA_PLAYER =
+            "com.framgia.music_31.ACTION_STATUS_MEDIA_PLAYER";
     public static final String ACTION_SONG_CHANGED = "com.framgia.music_31.ACTION_SONG_CHANGED";
     private static final String KEY_SONGS = "KEY_SONG";
     private static final String KEY_POSITON = "KEY_POSITON";
@@ -65,7 +67,7 @@ public class MusicService extends Service
         return intent;
     }
 
-    public int getCurrentTime(){
+    public int getCurrentTime() {
         return mMediaPlayer.getCurrentPosition();
     }
 
@@ -114,9 +116,9 @@ public class MusicService extends Service
                         previous();
                         break;
                     case ACTION_PLAY_CONTROL:
-                        if(mMediaPlayer.isPlaying()){
+                        if (mMediaPlayer.isPlaying()) {
                             pause();
-                        }else {
+                        } else {
                             start();
                         }
                         break;
@@ -138,11 +140,13 @@ public class MusicService extends Service
     }
 
     private void changePlayerControl() {
-        if (mMediaPlayer.isPlaying()){
-            mRemoteViews.setImageViewResource(R.id.button_status_notify, R.drawable.ic_pause_white_24dp);
+        if (mMediaPlayer.isPlaying()) {
+            mRemoteViews.setImageViewResource(R.id.button_status_notify,
+                    R.drawable.ic_pause_white_24dp);
             mNotificationManager.notify(ID_NOTI, mNotification.build());
-        }else {
-            mRemoteViews.setImageViewResource(R.id.button_status_notify, R.drawable.ic_play_arrow_white_24dp);
+        } else {
+            mRemoteViews.setImageViewResource(R.id.button_status_notify,
+                    R.drawable.ic_play_arrow_white_24dp);
             mNotificationManager.notify(ID_NOTI, mNotification.build());
         }
     }
@@ -164,18 +168,20 @@ public class MusicService extends Service
         mIntentPlayer = new Intent(this, PlayerMusicActivity.class);
         mIntentPlayer.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         mIntentPlayer.putExtra(PlayerMusicActivity.KEY_SONG, song);
-        mPendingIntent = PendingIntent.getActivity(this, REQUEST_CODE_OK,
-                mIntentPlayer, PendingIntent.FLAG_UPDATE_CURRENT);
-        mRemoteViews = new RemoteViews(getApplication().getPackageName(), R.layout.notification_media);
+        mPendingIntent = PendingIntent.getActivity(this, REQUEST_CODE_OK, mIntentPlayer,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        mRemoteViews =
+                new RemoteViews(getApplication().getPackageName(), R.layout.notification_media);
 
         //create notification
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotification = new NotificationCompat.Builder(getApplication(), CHANNEL_ID)
-                .setContentIntent(mPendingIntent)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setCustomBigContentView(mRemoteViews)
-                .setCustomContentView(mRemoteViews)
-                .setContent(mRemoteViews);
+        mNotification =
+                new NotificationCompat.Builder(getApplication(), CHANNEL_ID).setContentIntent(
+                        mPendingIntent)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setCustomBigContentView(mRemoteViews)
+                        .setCustomContentView(mRemoteViews)
+                        .setContent(mRemoteViews);
         initRemoteViews(song);
         setListenerNotification();
         startForeground(ID_NOTI, mNotification.build());
@@ -186,18 +192,22 @@ public class MusicService extends Service
         Intent intentPrevious = new Intent(ACTION_PREVIOUS);
         Intent intentNext = new Intent(ACTION_NEXT);
         Intent intentClear = new Intent(ACTION_CLEAR);
-        PendingIntent pendingStatus = PendingIntent.getBroadcast(getApplication(),
-                REQUEST_CODE_OK, intentPlay,PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent pendingPrevious = PendingIntent.getBroadcast(getApplication(),
-                REQUEST_CODE_OK, intentPrevious,PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent pendingNext = PendingIntent.getBroadcast(getApplication(),
-                REQUEST_CODE_OK, intentNext, PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent pendingClear = PendingIntent.getBroadcast(getApplication(),
-                REQUEST_CODE_OK, intentClear, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingStatus =
+                PendingIntent.getBroadcast(getApplication(), REQUEST_CODE_OK, intentPlay,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingPrevious =
+                PendingIntent.getBroadcast(getApplication(), REQUEST_CODE_OK, intentPrevious,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingNext =
+                PendingIntent.getBroadcast(getApplication(), REQUEST_CODE_OK, intentNext,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingClear =
+                PendingIntent.getBroadcast(getApplication(), REQUEST_CODE_OK, intentClear,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
         mRemoteViews.setOnClickPendingIntent(R.id.button_next_notify, pendingNext);
         mRemoteViews.setOnClickPendingIntent(R.id.button_previous_notify, pendingPrevious);
         mRemoteViews.setOnClickPendingIntent(R.id.button_status_notify, pendingStatus);
-        mRemoteViews.setOnClickPendingIntent(R.id.image_clear_notify, pendingClear );
+        mRemoteViews.setOnClickPendingIntent(R.id.image_clear_notify, pendingClear);
     }
 
     private void initRemoteViews(Song song) {
@@ -206,10 +216,17 @@ public class MusicService extends Service
         String image = song.getUrlImage();
         mRemoteViews.setTextViewText(R.id.text_song, songTitle);
         mRemoteViews.setTextViewText(R.id.text_artist, artist);
-        Picasso.with(getApplication()).load(image).into(mRemoteViews, R.id.image_notification, ID_NOTI, mNotification.build());
+        if (image !=null){
+            Picasso.with(getApplication())
+                    .load(image)
+                    .into(mRemoteViews, R.id.image_notification, ID_NOTI, mNotification.build());
+        }else {
+            mRemoteViews.setImageViewResource(R.id.image_notification, R.mipmap.ic_launcher);
+        }
+
     }
 
-    public void updateProgress(int progress){
+    public void updateProgress(int progress) {
         mRemoteViews.setProgressBar(R.id.progress_notify, Constants.MAX_PROGRESS, progress, false);
         startForeground(ID_NOTI, mNotification.build());
     }
@@ -250,7 +267,7 @@ public class MusicService extends Service
 
     public void seekTo(int progress) {
         int total = mSongs.get(mPos).getDuration();
-        mMediaPlayer.seekTo( Utils.getCurrentTime(progress, total));
+        mMediaPlayer.seekTo(Utils.getCurrentTime(progress, total));
     }
 
     @Override

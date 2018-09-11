@@ -14,6 +14,6 @@ public interface SongDataSource {
     }
 
     interface LocalDataSource {
-
+        void getSongsLocal(CallBack<List<Song>> callBack);
     }
 }

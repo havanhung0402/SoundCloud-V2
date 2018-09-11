@@ -36,4 +36,9 @@ public class SongRepository
     public void getSongs(String genreParam, CallBack<List<Song>> callBack) {
         mSongRemoteDataSource.getSongs(genreParam, callBack);
     }
+
+    @Override
+    public void getSongsLocal(CallBack<List<Song>> callBack) {
+        mSongLocalDataSource.getSongsLocal(callBack);
+    }
 }

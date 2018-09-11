@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -20,6 +21,8 @@ import com.framgia.music_31.service.DownloadTrackService;
 import com.framgia.music_31.service.MusicService;
 import com.framgia.music_31.utils.Constants;
 import com.squareup.picasso.Picasso;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerMusicActivity extends AppCompatActivity
         implements PlayerMusicContract.View, View.OnClickListener, SeekBar.OnSeekBarChangeListener {
@@ -73,7 +76,6 @@ public class PlayerMusicActivity extends AppCompatActivity
 
     private void initBroadCast() {
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(MusicService.ACTION_PLAY_CONTROL);
         intentFilter.addAction(MusicService.ACTION_SONG_CHANGED);
         intentFilter.addAction(MusicService.ACTION_STATUS_MEDIA_PLAYER);
         mBroadcastReceiver = new BroadcastReceiver() {
