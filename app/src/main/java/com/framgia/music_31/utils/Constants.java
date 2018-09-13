@@ -27,4 +27,5 @@ public class Constants {
     public static final int NINE = 9;
     public static final String ZERO = "0";
     public static final String COLON = ":";
+    public static final String STORAGE_URL = "/sdcard/SoundCloud/";
 }

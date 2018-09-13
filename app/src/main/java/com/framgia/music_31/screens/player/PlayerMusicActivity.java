@@ -14,9 +14,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.framgia.music_31.R;
 import com.framgia.music_31.data.model.Song;
+import com.framgia.music_31.service.DownloadTrackService;
 import com.framgia.music_31.service.MusicService;
 import com.framgia.music_31.utils.Constants;
 import com.squareup.picasso.Picasso;
@@ -39,6 +39,7 @@ public class PlayerMusicActivity extends AppCompatActivity
     private ImageView mImageViewPreviousController;
     private ImageView mImageViewShuffleController;
     private ImageView mImageViewRepeatController;
+    private ImageView mImageViewDownload;
     private SeekBar mSeekBar;
     private TextView mTextViewCurrentTime;
     private TextView mTextViewTimeTotal;
@@ -104,6 +105,7 @@ public class PlayerMusicActivity extends AppCompatActivity
         mImageViewPreviousController = findViewById(R.id.image_previous_controller);
         mImageViewShuffleController = findViewById(R.id.image_shuffle_controller);
         mImageViewRepeatController = findViewById(R.id.image_repeat_controller);
+        mImageViewDownload = findViewById(R.id.image_download);
     }
 
     private void initData() {
@@ -120,12 +122,13 @@ public class PlayerMusicActivity extends AppCompatActivity
         mImageViewPlayerControl.setOnClickListener(this);
         mImageViewNextController.setOnClickListener(this);
         mImageViewRepeatController.setOnClickListener(this);
+        mImageViewDownload.setOnClickListener(this);
         mSeekBar.setOnSeekBarChangeListener(this);
     }
 
-    private String getFormatString(int time){
-        int minute = ((time/Constants.MILLIS) / Constants.SIXTY);
-        int second = (time/Constants.MILLIS) % Constants.SIXTY;
+    private String getFormatString(int time) {
+        int minute = ((time / Constants.MILLIS) / Constants.SIXTY);
+        int second = (time / Constants.MILLIS) % Constants.SIXTY;
         return String.format("%d:%02d", minute, second);
     }
 
@@ -184,10 +187,19 @@ public class PlayerMusicActivity extends AppCompatActivity
             case R.id.image_repeat_controller:
                 changeRepeat();
                 break;
+            case R.id.image_download:
+                downloadTrack();
+                break;
             case R.id.image_back_stack:
                 finish();
                 break;
         }
+    }
+
+    private void downloadTrack() {
+        Song song = mMusicService.getCurrentSong();
+        startService(DownloadTrackService.getIntentServiceDownload(this, song.getSongName(),
+                song.getUrl()));
     }
 
     private void updateTime() {
@@ -208,9 +220,9 @@ public class PlayerMusicActivity extends AppCompatActivity
     };
 
     private void changePlayerControl() {
-        if(mMusicService.isPlaying()){
+        if (mMusicService.isPlaying()) {
             mImageViewPlayerControl.setImageResource(R.drawable.ic_pause_white_48dp);
-        }else {
+        } else {
             mImageViewPlayerControl.setImageResource(R.drawable.ic_play_arrow_white_48dp);
         }
     }

@@ -3,6 +3,7 @@
     package="com.framgia.music_31">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -19,13 +20,18 @@
             </intent-filter>
         </activity>
         <activity android:name=".screens.song.SongActivity"/>
-        <activity android:name=".screens.player.PlayerMusicActivity"
+        <activity
+            android:name=".screens.player.PlayerMusicActivity"
             android:theme="@style/AppTheme"/>
 
         <service
             android:name=".service.MusicService"
             android:enabled="true"
             android:exported="false"/>
+        <service
+            android:name=".service.DownloadTrackService"
+            android:exported="false">
+        </service>
     </application>
 
 </manifest>

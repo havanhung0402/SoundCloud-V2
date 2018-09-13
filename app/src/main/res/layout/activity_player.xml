@@ -145,4 +145,14 @@
         app:layout_constraintStart_toEndOf="@+id/image_back_stack"
         app:layout_constraintTop_toBottomOf="@+id/text_title"
         />
+    <ImageView
+        android:id="@+id/image_download"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_16"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_arrow_downward_white_24dp"
+        />
 </android.support.constraint.ConstraintLayout>
