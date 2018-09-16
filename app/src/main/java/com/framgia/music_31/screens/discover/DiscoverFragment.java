@@ -53,6 +53,7 @@ public class DiscoverFragment extends Fragment
         parents.add(new Parent(Parent.GENRES));
         setLayout();
         setAdapter(parents);
+        mPresenter.start();
     }
 
     private void setAdapter(List<Parent> parents) {
@@ -67,12 +68,6 @@ public class DiscoverFragment extends Fragment
     private void setLayout() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(layoutManager);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        mPresenter.start();
     }
 
     @Override

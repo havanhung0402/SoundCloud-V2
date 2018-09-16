@@ -63,7 +63,12 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
         private void fillData(Song song) {
             mTextSongName.setText(song.getSongName());
             mTextSingerName.setText(song.getSingerName());
-            Picasso.with(itemView.getContext()).load(song.getUrlImage()).into(mImageItem);
+            if (song.getUrlImage().equals("null")){
+                mImageItem.setImageResource(R.drawable.ic_music_note_gray_24dp);
+                mImageItem.setBackgroundResource(R.drawable.image_item_music);
+            }else {
+                Picasso.with(itemView.getContext()).load(song.getUrlImage()).into(mImageItem);
+            }
             mImageMenu.setImageResource(R.drawable.ic_more_vert_gray_24dp);
         }
 

@@ -30,16 +30,12 @@ import com.framgia.music_31.utils.Constants;
 import com.squareup.picasso.Picasso;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.ArrayList;
-import java.util.List;
 
 public class PlayerMusicActivity extends AppCompatActivity
         implements PlayerMusicContract.View, View.OnClickListener, SeekBar.OnSeekBarChangeListener,
         CompoundButton.OnCheckedChangeListener {
 
     public static final String KEY_SONG = "song";
-    public static final String KEY_POSITON = "position";
-    public static final String KEY_LIST_SONG = "songs";
     public static final int DEFAULT_POSITON = 0;
     private static final int DELAY_MILLIS = 1000;
 
@@ -196,7 +192,12 @@ public class PlayerMusicActivity extends AppCompatActivity
         mTextViewTitle.setText(song.getSongName());
         mTextViewArtist.setText(song.getSingerName());
         mTextViewTimeTotal.setText(getFormatString(song.getDuration()));
-        Picasso.with(this).load(song.getUrlImage()).into(mImageViewSong);
+        if (!song.getUrlImage().equals("null")){
+            Picasso.with(this).load(song.getUrlImage()).into(mImageViewSong);
+        }else {
+            mImageViewSong.setImageResource(R.drawable.ic_music_note_gray_24dp);
+            mImageViewSong.setBackgroundResource(R.drawable.image_item_music);
+        }
     }
 
     @Override

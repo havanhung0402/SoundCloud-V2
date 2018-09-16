@@ -1,8 +1,8 @@
 package com.framgia.music_31.screens.main;
 
-import android.app.Fragment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -10,14 +10,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import com.framgia.music_31.R;
-import com.framgia.music_31.screens.discover.DiscoverFragment;
-import com.framgia.music_31.screens.mymusic.MyMusicFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements BottomNavigationView.OnNavigationItemSelectedListener {
+        implements BottomNavigationView.OnNavigationItemSelectedListener, ViewPager.OnPageChangeListener {
     private BottomNavigationView mBottomNavigationView;
-    private DiscoverFragment mDiscoverFragment;
-    private MyMusicFragment mMyMusicFragment;
+    private ViewPager mViewPager;
+    private ViewPagerAdapter mViewPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +23,12 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        mViewPager = findViewById(R.id.view_pager);
         mBottomNavigationView = findViewById(R.id.navigation);
         mBottomNavigationView.setOnNavigationItemSelectedListener(this);
+        mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mViewPagerAdapter);
+        mViewPager.addOnPageChangeListener(this);
     }
 
     @Override
@@ -47,29 +49,32 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        android.support.v4.app.Fragment fragment =null;
         switch (item.getItemId()) {
             case R.id.navigation_my_music:
-                if(fragment == null){
-                    fragment = MyMusicFragment.newInstance();
-                }
+                mViewPager.setCurrentItem(ViewPagerAdapter.MY_MUSIC_FRAGMENT);
                 break;
             case R.id.navigation_discover:
-                if(fragment == null){
-                    fragment = DiscoverFragment.newInstance();
-                }
+                mViewPager.setCurrentItem(ViewPagerAdapter.DISCOVER_FRAGMENT);
                 break;
             case R.id.navigation_more:
+                mViewPager.setCurrentItem(ViewPagerAdapter.MORE_FRAGMENT);
                 break;
         }
-        return replaceFragment(fragment);
+        return true;
     }
 
-    private boolean replaceFragment(android.support.v4.app.Fragment fragment) {
-        if (fragment != null){
-            getSupportFragmentManager().beginTransaction().replace(R.id.view_container, fragment).commit();
-            return true;
-        }
-        return false;
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        mBottomNavigationView.getMenu().getItem(position).setChecked(true);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }
