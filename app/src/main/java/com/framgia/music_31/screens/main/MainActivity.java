@@ -1,5 +1,8 @@
 package com.framgia.music_31.screens.main;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
@@ -10,12 +13,24 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import com.framgia.music_31.R;
+import com.framgia.music_31.data.model.Playlist;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener, ViewPager.OnPageChangeListener {
+
+    public static final String KEY_PLAYLISTS = "key_playlists";
     private BottomNavigationView mBottomNavigationView;
     private ViewPager mViewPager;
     private ViewPagerAdapter mViewPagerAdapter;
+
+    public static Intent getMainIntent(Context context, List<Playlist> playlists) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putParcelableArrayListExtra(KEY_PLAYLISTS,
+                (ArrayList<? extends Parcelable>) playlists);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +41,8 @@ public class MainActivity extends AppCompatActivity
         mViewPager = findViewById(R.id.view_pager);
         mBottomNavigationView = findViewById(R.id.navigation);
         mBottomNavigationView.setOnNavigationItemSelectedListener(this);
-        mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        List<Playlist> playlists = getIntent().getParcelableArrayListExtra(KEY_PLAYLISTS);
+        mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), playlists);
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.addOnPageChangeListener(this);
     }

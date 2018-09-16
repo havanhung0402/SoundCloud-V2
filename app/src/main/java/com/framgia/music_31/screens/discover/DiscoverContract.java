@@ -12,7 +12,6 @@ import java.util.List;
 public interface DiscoverContract {
 
     interface View {
-        void onGetPlayListSuccess(List<Playlist> playlists);
 
         void onGetDataError(Exception e);
 
@@ -20,7 +19,6 @@ public interface DiscoverContract {
     }
 
     interface Presenter extends BasePresenter<View> {
-        void loadPlaylist();
 
         void getGenre();
     }

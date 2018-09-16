@@ -10,10 +10,8 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.IntDef;
-import android.support.annotation.StringDef;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -55,7 +53,7 @@ public class PlayerMusicActivity extends AppCompatActivity
     private PlayerMusicPresenter mPresenter;
     private MusicService mMusicService;
     private BroadcastReceiver mBroadcastReceiver;
-    private Boolean mIsBound;
+    private boolean mIsBound;
     private Handler mHandler = new Handler();
     private SharedPreferences.Editor mEditorShuffle;
     private SharedPreferences mPreferencesShuffle;
@@ -65,6 +63,7 @@ public class PlayerMusicActivity extends AppCompatActivity
     public static final int LEVEL_0 = 0;
     public static final int LEVEL_1 = 1;
     public static final int LEVEL_2 = 2;
+    private static final String NULL_OBJECT = "null";
 
     @IntDef({LEVEL_0, LEVEL_1, LEVEL_2})
     @Retention(RetentionPolicy.SOURCE)
@@ -101,7 +100,9 @@ public class PlayerMusicActivity extends AppCompatActivity
             public void onReceive(Context context, Intent intent) {
                 switch (intent.getAction()) {
                     case MusicService.ACTION_SONG_CHANGED:
-                        updateSong(mMusicService.getCurrentSong());
+                        if (mIsBound){
+                            updateSong(mMusicService.getCurrentSong());
+                        }
                         break;
                     case MusicService.ACTION_STATUS_MEDIA_PLAYER:
                         changePlayerControl();
@@ -192,11 +193,11 @@ public class PlayerMusicActivity extends AppCompatActivity
         mTextViewTitle.setText(song.getSongName());
         mTextViewArtist.setText(song.getSingerName());
         mTextViewTimeTotal.setText(getFormatString(song.getDuration()));
-        if (!song.getUrlImage().equals("null")){
-            Picasso.with(this).load(song.getUrlImage()).into(mImageViewSong);
-        }else {
+        if (song.getUrlImage() == null || song.getUrlImage().equals(NULL_OBJECT)){
             mImageViewSong.setImageResource(R.drawable.ic_music_note_gray_24dp);
             mImageViewSong.setBackgroundResource(R.drawable.image_item_music);
+        }else {
+            Picasso.with(this).load(song.getUrlImage()).into(mImageViewSong);
         }
     }
 
@@ -248,6 +249,9 @@ public class PlayerMusicActivity extends AppCompatActivity
     };
 
     private void changePlayerControl() {
+        if (!mIsBound){
+            return;
+        }
         if (mMusicService.isPlaying()) {
             mImageViewPlayerControl.setImageResource(R.drawable.ic_pause_white_48dp);
         } else {
@@ -320,7 +324,6 @@ public class PlayerMusicActivity extends AppCompatActivity
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        Log.i("Shuffle", isChecked + "");
         setShuffle(isChecked);
     }
 }

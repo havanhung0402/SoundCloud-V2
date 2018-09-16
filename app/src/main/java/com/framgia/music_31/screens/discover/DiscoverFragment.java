@@ -1,10 +1,12 @@
 package com.framgia.music_31.screens.discover;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,12 +27,16 @@ import java.util.List;
 public class DiscoverFragment extends Fragment
         implements DiscoverContract.View, GenreAdapter.OnGenreItemClickListener {
 
+    private static final String KEY_PLAYLIST_ARGUMENT = "playlist";
     private RecyclerView mRecyclerView;
     private DiscoverContract.Presenter mPresenter;
     private ParentAdapter mParentAdapter;
 
-    public static DiscoverFragment newInstance() {
+    public static DiscoverFragment newInstance(List<Playlist> playlists) {
         DiscoverFragment discoverFragment = new DiscoverFragment();
+        Bundle args = new Bundle();
+        args.putParcelableArrayList(KEY_PLAYLIST_ARGUMENT, (ArrayList<? extends Parcelable>) playlists);
+        discoverFragment.setArguments(args);
         return discoverFragment;
     }
 
@@ -59,6 +65,11 @@ public class DiscoverFragment extends Fragment
     private void setAdapter(List<Parent> parents) {
         mParentAdapter = new ParentAdapter(this, parents);
         mRecyclerView.setAdapter(mParentAdapter);
+        if (getArguments() != null) {
+            List<Playlist> playlists = getArguments().getParcelableArrayList(KEY_PLAYLIST_ARGUMENT);
+            mParentAdapter.addData(playlists);
+        }
+
     }
 
     private void initView(View view) {
@@ -68,11 +79,6 @@ public class DiscoverFragment extends Fragment
     private void setLayout() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(layoutManager);
-    }
-
-    @Override
-    public void onGetPlayListSuccess(List<Playlist> playlists) {
-        mParentAdapter.addData(playlists);
     }
 
     @Override

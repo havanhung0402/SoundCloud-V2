@@ -20,7 +20,7 @@ public class Genre implements Parcelable{
 
     public static final String ALL_MUSIC_PARAM = "all-music";
     public static final String ALL_AUDIO_PARAM = "all-audio";
-    public static final String ALTERNATIVE_ROCK_PARAM = "alternative-rock";
+    public static final String ALTERNATIVE_ROCK_PARAM = "alternativerock";
     public static final String AMBIENT_PARAM = "ambient";
     public static final String CLASSICAL_PARAM = "classical";
     public static final String COUNTRY_PARAM = "country";
