@@ -22,7 +22,6 @@ public class DiscoverPresenter implements DiscoverContract.Presenter {
 
     @Override
     public void start() {
-        loadPlaylist();
         getGenre();
     }
 
@@ -31,20 +30,6 @@ public class DiscoverPresenter implements DiscoverContract.Presenter {
         mView = view;
     }
 
-    @Override
-    public void loadPlaylist() {
-        mDiscoverRepository.getPlaylists(new CallBack<List<Playlist>>() {
-            @Override
-            public void onSusscess(List<Playlist> datas) {
-                mView.onGetPlayListSuccess(datas);
-            }
-
-            @Override
-            public void onError(Exception e) {
-
-            }
-        });
-    }
 
     @Override
     public void getGenre() {
