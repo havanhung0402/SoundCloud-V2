@@ -33,8 +33,8 @@ public class SongRepository
     }
 
     @Override
-    public void getSongs(String genreParam, CallBack<List<Song>> callBack) {
-        mSongRemoteDataSource.getSongs(genreParam, callBack);
+    public void getSongs(String genreUrl, String action, CallBack<List<Song>> callBack) {
+        mSongRemoteDataSource.getSongs(genreUrl, action, callBack);
     }
 
     @Override

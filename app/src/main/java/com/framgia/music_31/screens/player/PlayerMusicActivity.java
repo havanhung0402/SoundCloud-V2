@@ -63,7 +63,6 @@ public class PlayerMusicActivity extends AppCompatActivity
     public static final int LEVEL_0 = 0;
     public static final int LEVEL_1 = 1;
     public static final int LEVEL_2 = 2;
-    private static final String NULL_OBJECT = "null";
 
     @IntDef({LEVEL_0, LEVEL_1, LEVEL_2})
     @Retention(RetentionPolicy.SOURCE)
@@ -193,7 +192,7 @@ public class PlayerMusicActivity extends AppCompatActivity
         mTextViewTitle.setText(song.getSongName());
         mTextViewArtist.setText(song.getSingerName());
         mTextViewTimeTotal.setText(getFormatString(song.getDuration()));
-        if (song.getUrlImage() == null || song.getUrlImage().equals(NULL_OBJECT)){
+        if (song.getUrlImage() == null || song.getUrlImage().equals(Constants.NULL_OBJECT)){
             mImageViewSong.setImageResource(R.drawable.ic_music_note_gray_24dp);
             mImageViewSong.setBackgroundResource(R.drawable.image_item_music);
         }else {

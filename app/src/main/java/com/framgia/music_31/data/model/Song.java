@@ -125,7 +125,7 @@ public class Song implements Parcelable {
     public static class JsonTrackKey {
         public static final String ID = "id";
         public static final String TITLE = "title";
-        public static final String URI = "url";
+        public static final String URI = "uri";
         public static final String ARTWORK_URL = "artwork_url";
         public static final String DURATION = "duration";
         public static final String GENRE = "genre";

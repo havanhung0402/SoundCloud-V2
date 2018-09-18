@@ -10,7 +10,7 @@ import java.util.List;
 public interface SongDataSource {
 
     interface RemoteDataSource {
-        void getSongs(String genre, CallBack<List<Song>> callBack);
+        void getSongs(String genre, String action, CallBack<List<Song>> callBack);
     }
 
     interface LocalDataSource {

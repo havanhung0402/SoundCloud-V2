@@ -28,17 +28,16 @@ public class SongRemoteDataSource implements SongDataSource.RemoteDataSource {
     }
 
     @Override
-    public void getSongs(String genreParam, CallBack<List<Song>> callBack) {
-        String url = Constants.BASE_URL_V2
-                + Constants.CHARTS
-                + Constants.QUESTION_MARK
-                + Constants.PARAM_KIND
-                + Constants.AMPERSAND
-                + Constants.PARAM_GENRE
-                + genreParam
-                + Constants.AMPERSAND
-                + Constants.CLIENT_ID
-                + BuildConfig.YOUR_API_KEY;
-        new GetSongsFromUri(callBack).execute(url);
+    public void getSongs(String baseUrl, String action, CallBack<List<Song>> callBack) {
+        String url = null;
+        if(action.equals("action.GENRE")){
+            url = baseUrl + Constants.AMPERSAND + Constants.CLIENT_ID + BuildConfig.YOUR_API_KEY;
+            new GetSongsFromUri(callBack).execute(url);
+        }else if (action.equals("action.PLAYLIST")){
+            url = baseUrl+ Constants.QUESTION_MARK
+                    + Constants.CLIENT_ID
+                    + BuildConfig.YOUR_API_KEY;
+            new GetSongFromPlaylist(callBack).execute(url);
+        }
     }
 }

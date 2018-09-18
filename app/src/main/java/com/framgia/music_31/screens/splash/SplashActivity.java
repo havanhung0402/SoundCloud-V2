@@ -32,6 +32,6 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
 
     @Override
     public void onGetDataError(Exception e) {
-
+        finish();
     }
 }

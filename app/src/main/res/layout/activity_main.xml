@@ -20,6 +20,7 @@
                 android:id="@+id/searchview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginEnd="16dp"
                 android:background="@drawable/searchview_background"
                 app:queryHint="@string/text_hint_search"
                 >

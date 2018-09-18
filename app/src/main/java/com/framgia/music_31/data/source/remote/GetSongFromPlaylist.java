@@ -1,11 +1,11 @@
 package com.framgia.music_31.data.source.remote;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import com.framgia.music_31.BuildConfig;
 import com.framgia.music_31.data.model.Playlist;
 import com.framgia.music_31.data.model.Song;
 import com.framgia.music_31.data.source.CallBack;
-import com.framgia.music_31.data.source.DiscoverDataSource;
 import com.framgia.music_31.utils.Constants;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -19,24 +19,23 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
- * Created by hungdev on 06/09/2018.
+ * Created by hungdev on 16/09/2018.
  */
 
-public class GetPlaylistFromUri extends AsyncTask<String, Void, List<Playlist>> {
+public class GetSongFromPlaylist extends AsyncTask<String, Void, List<Song>> {
 
-    private static final String COLLECTION = "collection";
-    private static final String PLAYLISTS = "playlists";
-    private static final int POSITION = 2;
+    private static final String KEY_USER = "user";
+    private static final String KEY_FULL_NAME = "username";
     private Exception mException;
     private CallBack mCallback;
 
-    public GetPlaylistFromUri(CallBack callback) {
+    public GetSongFromPlaylist(CallBack callback) {
         mCallback = callback;
     }
 
     @Override
-    protected List<Playlist> doInBackground(String... strings) {
-        List<Playlist> playlists = new ArrayList<>();
+    protected List<Song> doInBackground(String... strings) {
+        List<Song> songs = new ArrayList<>();
         try {
             URL url = new URL(strings[0]);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -48,51 +47,58 @@ public class GetPlaylistFromUri extends AsyncTask<String, Void, List<Playlist>> 
                 dataBuffer.append(line + "\n");
             }
             String jsonData = dataBuffer.toString();
-            getCollection(jsonData, playlists);
+            getCollection(jsonData, songs);
         } catch (Exception e) {
             mException = e;
         }
-        return playlists;
+        return songs;
     }
 
     @Override
-    protected void onPostExecute(List<Playlist> playlists) {
-        super.onPostExecute(playlists);
+    protected void onPostExecute(List<Song> songs) {
+        super.onPostExecute(songs);
         if (mException != null) {
             mCallback.onError(mException);
         }
-        if (!playlists.isEmpty()) {
-            mCallback.onSusscess(playlists);
+        if (!songs.isEmpty()) {
+            mCallback.onSusscess(songs);
         } else {
             mCallback.onError(mException);
         }
     }
 
-    private void addPlaylist(List<Playlist> playlists, JSONArray jsonArray) {
-        JSONObject playlist = null;
+    private void addSong(List<Song> songs, JSONArray jsonArray) {
+
         for (int i = 0; i < jsonArray.length(); i++) {
             try {
-                playlist = jsonArray.getJSONObject(i);
-                long id = playlist.getLong(Song.JsonTrackKey.ID);
-                String title = playlist.getString(Song.JsonTrackKey.TITLE);
-                String url_image = playlist.getString(Song.JsonTrackKey.ARTWORK_URL);
-                String url = playlist.getString(Song.JsonTrackKey.URI);
-                playlists.add(new Playlist(id, title, url_image, url));
+                JSONObject track = jsonArray.getJSONObject(i);
+                String uri_image = track.getString(Song.JsonTrackKey.ARTWORK_URL);
+                long id = track.getLong(Song.JsonTrackKey.ID);
+                int duration = track.getInt(Song.JsonTrackKey.DURATION);
+                String title = track.getString(Song.JsonTrackKey.TITLE);
+                String artist = track.getJSONObject(KEY_USER).getString(KEY_FULL_NAME);
+                String uri_stream = Constants.BASE_URL
+                        + Constants.TRACKS
+                        + Constants.SLASH
+                        + id
+                        + Constants.SLASH
+                        + Constants.STREAM
+                        + Constants.QUESTION_MARK
+                        + Constants.CLIENT_ID
+                        + BuildConfig.YOUR_API_KEY;
+                songs.add(new Song(id, title, artist, uri_image, duration, uri_stream));
             } catch (Exception e) {
                 mException = e;
             }
         }
     }
 
-    private void getCollection(String jsonData, List<Playlist> playlists) {
+    private void getCollection(String jsonData, List<Song> songs) {
         JSONObject jsonObject = null;
-        JSONArray playlistsJson = null;
         try {
             jsonObject = new JSONObject(jsonData);
-            JSONArray jsonArray = jsonObject.getJSONArray(COLLECTION);
-            JSONObject collectionJson = jsonArray.getJSONObject(POSITION);
-            playlistsJson = collectionJson.getJSONArray(PLAYLISTS);
-            addPlaylist(playlists, playlistsJson);
+            JSONArray jsonArray = jsonObject.getJSONArray(Constants.TRACKS);
+            addSong(songs, jsonArray);
         } catch (Exception e) {
             mException = e;
         }

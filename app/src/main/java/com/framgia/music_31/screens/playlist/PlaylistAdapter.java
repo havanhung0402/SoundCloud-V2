@@ -1,4 +1,4 @@
-package com.framgia.music_31.screens.discover;
+package com.framgia.music_31.screens.playlist;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,34 +13,34 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 /**
- * Created by hungdev on 31/08/2018.
+ * Created by hungdev on 17/09/2018.
  */
 
 public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder> {
 
     private List<Playlist> mPlaylists;
-    private OnItemPlaylistClickListener mClickListener;
+    private OnItemClick mItemClick;
 
-    public PlaylistAdapter(List<Playlist> playlists, OnItemPlaylistClickListener clickListener) {
+    public PlaylistAdapter(List<Playlist> playlists, OnItemClick onItemClick) {
         mPlaylists = playlists;
-        mClickListener = clickListener;
+        mItemClick = onItemClick;
     }
 
     @Override
     public PlaylistViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_playlist, parent, false);
-        return new PlaylistViewHolder(itemView, mPlaylists, mClickListener);
+                .inflate(R.layout.item_playlist_gridview, parent, false);
+        return new PlaylistViewHolder(itemView, mPlaylists, mItemClick);
     }
 
     @Override
-    public void onBindViewHolder(PlaylistViewHolder holder, int position) {
+    public void onBindViewHolder(PlaylistAdapter.PlaylistViewHolder holder, int position) {
         holder.fillData(mPlaylists.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mPlaylists == null ? 0 : Math.min(mPlaylists.size(), 10);
+        return mPlaylists == null ? 0 : mPlaylists.size();
     }
 
     public static class PlaylistViewHolder extends RecyclerView.ViewHolder implements
@@ -49,14 +49,14 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         private TextView mTextTitle;
         private ImageView mImageItem;
         private List<Playlist> mPlaylists;
-        private OnItemPlaylistClickListener mClickListener;
+        private OnItemClick mOnItemClick;
 
-        public PlaylistViewHolder(View itemView, List<Playlist> playlists, OnItemPlaylistClickListener clickListener) {
+        public PlaylistViewHolder(View itemView, List<Playlist> playlists, OnItemClick onItemClick) {
             super(itemView);
             mTextTitle = itemView.findViewById(R.id.text_title);
             mImageItem = itemView.findViewById(R.id.image_playlist);
             mPlaylists = playlists;
-            mClickListener = clickListener;
+            mOnItemClick = onItemClick;
             itemView.setOnClickListener(this);
         }
 
@@ -72,12 +72,12 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
 
         @Override
         public void onClick(View v) {
-            mClickListener.onItemClick(mPlaylists.get(getAdapterPosition()));
+            mOnItemClick.onClick(mPlaylists.get(getAdapterPosition()));
         }
     }
 
-    interface OnItemPlaylistClickListener {
-
-        void onItemClick(Playlist playlist);
+    interface OnItemClick {
+        void onClick(Playlist playlists);
     }
+
 }

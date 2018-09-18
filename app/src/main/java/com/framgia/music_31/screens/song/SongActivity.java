@@ -2,22 +2,26 @@ package com.framgia.music_31.screens.song;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import com.framgia.music_31.R;
 import com.framgia.music_31.data.model.Genre;
+import com.framgia.music_31.data.model.Playlist;
 import com.framgia.music_31.data.model.Song;
 import com.framgia.music_31.data.repository.SongRepository;
 import com.framgia.music_31.data.source.local.SongLocalDataSource;
 import com.framgia.music_31.data.source.remote.SongRemoteDataSource;
 import com.framgia.music_31.screens.player.PlayerMusicActivity;
 import com.framgia.music_31.service.MusicService;
+import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,16 +37,17 @@ public class SongActivity extends AppCompatActivity implements SongContract.View
     private SongContract.Presenter mPresenter;
     private SongAdapter mSongAdapter;
 
-    public static Intent getPlaylistIntent(Context context, Genre genre) {
+    public static <T>Intent getPlaylistIntent(Context context, T genre, String action) {
         Intent intent = new Intent(context, SongActivity.class);
-        intent.putExtra(KEY_GENRE, genre);
+        intent.setAction(action);
+        intent.putExtra(KEY_GENRE, (Parcelable) genre);
         return intent;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_playlist);
+        setContentView(R.layout.activity_song);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initComponents();
@@ -56,23 +61,35 @@ public class SongActivity extends AppCompatActivity implements SongContract.View
     }
 
     private void initData() {
-        Genre genre = getIntent().getParcelableExtra(KEY_GENRE);
-        String genreParam = genre.getParamGenre();
-        mCollapsingToolbarLayout.setTitle(genre.getTitle());
-        mImagePlaylist.setImageResource(genre.getImage());
+        String url = null;
+        Genre genre = null;
+        String action;
+        Playlist playlist;
+        if ((action = getIntent().getAction()).equals("action.GENRE")){
+            genre = getIntent().getParcelableExtra(KEY_GENRE);
+            url = genre.getUrl();
+            mCollapsingToolbarLayout.setTitle(genre.getTitle());
+            mImagePlaylist.setImageResource(genre.getImage());
+        }else if ((action = getIntent().getAction()).equals("action.PLAYLIST")){
+            playlist = getIntent().getParcelableExtra(KEY_GENRE);
+            url = playlist.getUrl();
+            Log.i("Url:", url);
+            mCollapsingToolbarLayout.setTitle(playlist.getTitle());
+            Picasso.with(this).load(playlist.getUrlImage()).into(mImagePlaylist);
+        }
         mPresenter = new SongPresenter(SongRepository.getsInstance(SongRemoteDataSource.getInstance(),
-                SongLocalDataSource.getInstance(this)), genre.getParamGenre());
+                SongLocalDataSource.getInstance(this)));
         mPresenter.setView(this);
         List<Song> songs = new ArrayList<>();
         mSongAdapter = new SongAdapter(songs, this);
-        initView(genreParam);
+        initView(url, action);
     }
 
-    private void initView(String genreParam) {
+    private void initView(String url, String action) {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mSongAdapter);
-        mPresenter.loadSongs(genreParam);
+        mPresenter.loadSongs(url, action);
     }
 
     @Override

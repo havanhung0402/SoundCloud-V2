@@ -12,11 +12,9 @@ import java.util.List;
 public class SongPresenter implements SongContract.Presenter{
     private SongRepository mSongRepository;
     private SongContract.View mView;
-    private String mGenre;
 
-    public SongPresenter(SongRepository songRepository, String genreParam) {
+    public SongPresenter(SongRepository songRepository) {
         mSongRepository = songRepository;
-        mGenre = genreParam;
     }
 
     @Override
@@ -30,8 +28,8 @@ public class SongPresenter implements SongContract.Presenter{
     }
 
     @Override
-    public void loadSongs(String genreParam) {
-        mSongRepository.getSongs(genreParam,new CallBack<List<Song>>() {
+    public void loadSongs(String url, String action) {
+        mSongRepository.getSongs(url, action, new CallBack<List<Song>>() {
             @Override
             public void onSusscess(List<Song> datas) {
                 mView.onGetSongsSuccess(datas);

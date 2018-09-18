@@ -33,4 +33,5 @@ public class Constants {
     public static final String PREF_REPEAT = "repeat";
     public static final String KEY_REPEAT = "key_repeat";
     public static final int IMAGE_LEVEL_DEFAULT = 0;
+    public static final String NULL_OBJECT = "null";
 }

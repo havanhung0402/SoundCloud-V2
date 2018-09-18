@@ -13,7 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".screens.main.MainActivity">
-
         </activity>
         <activity android:name=".screens.song.SongActivity"/>
         <activity
@@ -29,7 +28,8 @@
             android:exported="false">
         </service>
 
-        <activity android:name=".screens.splash.SplashActivity"
+        <activity
+            android:name=".screens.splash.SplashActivity"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -37,7 +37,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
+        <activity android:name=".screens.playlist.PlaylistActivity">
+        </activity>
     </application>
 
 </manifest>

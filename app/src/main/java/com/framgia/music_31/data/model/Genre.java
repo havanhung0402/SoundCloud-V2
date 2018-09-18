@@ -18,16 +18,16 @@ public class Genre implements Parcelable{
     public static final String CLASSICAL = "CLASSICAL";
     public static final String COUNTRY= "COUNTRY";
 
-    public static final String ALL_MUSIC_PARAM = "all-music";
-    public static final String ALL_AUDIO_PARAM = "all-audio";
-    public static final String ALTERNATIVE_ROCK_PARAM = "alternativerock";
-    public static final String AMBIENT_PARAM = "ambient";
-    public static final String CLASSICAL_PARAM = "classical";
-    public static final String COUNTRY_PARAM = "country";
+    public static final String ALL_MUSIC_PARAM = "https://api-v2.soundcloud.com/charts?kind=top&genre=soundcloud%3Agenres%3Aall-music";
+    public static final String ALL_AUDIO_PARAM = "https://api-v2.soundcloud.com/charts?kind=top&genre=soundcloud%3Agenres%3Aall-audio";
+    public static final String ALTERNATIVE_ROCK_PARAM = "https://api-v2.soundcloud.com/charts?kind=top&genre=soundcloud%3Agenres%3Aalternativerock";
+    public static final String AMBIENT_PARAM = "https://api-v2.soundcloud.com/charts?kind=top&genre=soundcloud%3Agenres%3Aambient";
+    public static final String CLASSICAL_PARAM = "https://api-v2.soundcloud.com/charts?kind=top&genre=soundcloud%3Agenres%3Aclassical";
+    public static final String COUNTRY_PARAM = "https://api-v2.soundcloud.com/charts?kind=top&genre=soundcloud%3Agenres%3Acountry";
 
     @StringDef({ALL_MUSIC_PARAM, ALL_AUDIO_PARAM, ALTERNATIVE_ROCK_PARAM, AMBIENT_PARAM, CLASSICAL_PARAM, COUNTRY_PARAM})
     @Retention(RetentionPolicy.SOURCE)
-    public @interface ParamGenre {}
+    public @interface Url {}
 
     @StringDef({ALL_MUSIC, ALL_AUDIO, ALTERNATIVE_ROCK, AMBIENT, CLASSICAL, COUNTRY})
     @Retention(RetentionPolicy.SOURCE)
@@ -35,21 +35,21 @@ public class Genre implements Parcelable{
 
     private String mTitle;
     private int mImage;
-    private String mParamGenre;
+    private String mUrl;
 
     public Genre() {
     }
 
-    public Genre(@Title String title, int image, @ParamGenre String paramGenre) {
+    public Genre(@Title String title, int image, @Url String url) {
         mTitle = title;
         mImage = image;
-        mParamGenre = paramGenre;
+        mUrl = url;
     }
 
     protected Genre(Parcel in) {
         mTitle = in.readString();
         mImage = in.readInt();
-        mParamGenre = in.readString();
+        mUrl = in.readString();
     }
 
     public String getTitle() {
@@ -68,12 +68,12 @@ public class Genre implements Parcelable{
         mImage = image;
     }
 
-    public String getParamGenre() {
-        return mParamGenre;
+    public String getUrl() {
+        return mUrl;
     }
 
-    public void setParamGenre(@ParamGenre String paramGenre) {
-        mParamGenre = paramGenre;
+    public void setUrl(@Url String paramGenre) {
+        mUrl = paramGenre;
     }
 
     @Override
@@ -85,7 +85,7 @@ public class Genre implements Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mTitle);
         dest.writeInt(mImage);
-        dest.writeString(mParamGenre);
+        dest.writeString(mUrl);
     }
 
     public static final Creator<Genre> CREATOR = new Creator<Genre>() {

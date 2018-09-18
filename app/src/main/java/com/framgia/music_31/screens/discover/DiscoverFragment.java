@@ -17,6 +17,7 @@ import com.framgia.music_31.data.model.Parent;
 import com.framgia.music_31.data.repository.DiscoverRepository;
 import com.framgia.music_31.data.source.local.DiscoverLocalDataSource;
 import com.framgia.music_31.data.source.remote.DiscoverRemoteDataSource;
+import com.framgia.music_31.screens.playlist.PlaylistActivity;
 import com.framgia.music_31.screens.song.SongActivity;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,9 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class DiscoverFragment extends Fragment
-        implements DiscoverContract.View, GenreAdapter.OnGenreItemClickListener {
+        implements DiscoverContract.View, GenreAdapter.OnGenreItemClickListener, PlaylistAdapter.OnItemPlaylistClickListener,
+
+        ParentAdapter.OnViewMoreClickListener{
 
     private static final String KEY_PLAYLIST_ARGUMENT = "playlist";
     private RecyclerView mRecyclerView;
@@ -63,7 +66,7 @@ public class DiscoverFragment extends Fragment
     }
 
     private void setAdapter(List<Parent> parents) {
-        mParentAdapter = new ParentAdapter(this, parents);
+        mParentAdapter = new ParentAdapter(this,this, parents, this);
         mRecyclerView.setAdapter(mParentAdapter);
         if (getArguments() != null) {
             List<Playlist> playlists = getArguments().getParcelableArrayList(KEY_PLAYLIST_ARGUMENT);
@@ -93,6 +96,16 @@ public class DiscoverFragment extends Fragment
 
     @Override
     public void onGenreClick(Genre genre) {
-        startActivity(SongActivity.getPlaylistIntent(getActivity(), genre));
+        startActivity(SongActivity.getPlaylistIntent(getActivity(), genre, "action.GENRE"));
+    }
+
+    @Override
+    public void onItemClick(Playlist playlist) {
+        startActivity(SongActivity.getPlaylistIntent(getActivity(), playlist, "action.PLAYLIST"));
+    }
+
+    @Override
+    public void onViewMoreClick(List<Playlist> playlists) {
+        startActivity(PlaylistActivity.getPlaylistIntent(getActivity(), playlists));
     }
 }

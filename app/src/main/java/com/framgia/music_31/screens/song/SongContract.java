@@ -17,6 +17,6 @@ public interface SongContract {
     }
 
     interface Presenter extends BasePresenter<View> {
-        void loadSongs(String genreParam);
+        void loadSongs(String genreUrl, String action);
     }
 }

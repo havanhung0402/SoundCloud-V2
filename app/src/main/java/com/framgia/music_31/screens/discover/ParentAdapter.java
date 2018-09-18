@@ -33,19 +33,25 @@ public class ParentAdapter extends RecyclerView.Adapter<ParentAdapter.SuperPlayl
     private List<Song> mSongs;
     private View itemView;
     private GenreAdapter.OnGenreItemClickListener mClickListener;
+    private PlaylistAdapter.OnItemPlaylistClickListener mItemPlaylistClickListener;
+    private OnViewMoreClickListener mViewMoreClickListener;
 
-    public ParentAdapter(GenreAdapter.OnGenreItemClickListener clickListener, List<Parent> parents) {
+    public ParentAdapter(GenreAdapter.OnGenreItemClickListener clickListener,
+            PlaylistAdapter.OnItemPlaylistClickListener itemPlaylistClickListener,
+            List<Parent> parents, OnViewMoreClickListener viewMoreClickListener) {
         mParents = parents;
         mClickListener = clickListener;
+        mItemPlaylistClickListener = itemPlaylistClickListener;
         mPlaylists = new ArrayList<>();
         mGenres = new ArrayList<>();
+        mViewMoreClickListener = viewMoreClickListener;
     }
 
     @Override
     public SuperPlaylistViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_parent, parent, false);
-        return new SuperPlaylistViewHolder(itemView);
+        return new SuperPlaylistViewHolder(itemView, mPlaylists, mViewMoreClickListener);
     }
 
     @Override
@@ -66,10 +72,10 @@ public class ParentAdapter extends RecyclerView.Adapter<ParentAdapter.SuperPlayl
         RecyclerView.LayoutManager mLayoutManager;
         switch (position) {
             case TYPE_PLAYLISTS:
-                mLayoutManager =
-                        new LinearLayoutManager(itemView.getContext(), LinearLayoutManager.HORIZONTAL, true);
+                mLayoutManager = new LinearLayoutManager(itemView.getContext(),
+                        LinearLayoutManager.HORIZONTAL, true);
                 holder.fillData(mParents.get(position), mLayoutManager,
-                        new PlaylistAdapter(mPlaylists), View.VISIBLE);
+                        new PlaylistAdapter(mPlaylists, mItemPlaylistClickListener), View.VISIBLE);
                 break;
             case TYPE_GENRES:
                 mLayoutManager = new GridLayoutManager(itemView.getContext(), SPAN_COUNT);
@@ -78,9 +84,10 @@ public class ParentAdapter extends RecyclerView.Adapter<ParentAdapter.SuperPlayl
                 break;
             case TYPE_SONGS:
                 mLayoutManager =
-                        new LinearLayoutManager(itemView.getContext(), LinearLayoutManager.VERTICAL, true);
-                holder.fillData(mParents.get(position), mLayoutManager,
-                        new SongAdapter(mSongs), View.VISIBLE);
+                        new LinearLayoutManager(itemView.getContext(), LinearLayoutManager.VERTICAL,
+                                true);
+                holder.fillData(mParents.get(position), mLayoutManager, new SongAdapter(mSongs),
+                        View.VISIBLE);
                 break;
         }
     }
@@ -90,17 +97,23 @@ public class ParentAdapter extends RecyclerView.Adapter<ParentAdapter.SuperPlayl
         return mParents == null ? 0 : mParents.size();
     }
 
-    public class SuperPlaylistViewHolder extends RecyclerView.ViewHolder {
+    public static class SuperPlaylistViewHolder extends RecyclerView.ViewHolder implements
+            View.OnClickListener {
 
         private TextView mTextTitle;
         private RecyclerView mRecyclerView;
         private TextView mTextViewMore;
+        private List<Playlist> mPlaylists;
+        private OnViewMoreClickListener mOnViewMoreClickListener;
 
-        public SuperPlaylistViewHolder(View itemView) {
+        public SuperPlaylistViewHolder(View itemView, List<Playlist> playlists, OnViewMoreClickListener viewMoreClickListener) {
             super(itemView);
             mTextTitle = itemView.findViewById(R.id.text_super_title);
             mRecyclerView = itemView.findViewById(R.id.recycler_view);
             mTextViewMore = itemView.findViewById(R.id.text_view_more);
+            mPlaylists = playlists;
+            mOnViewMoreClickListener = viewMoreClickListener;
+            mTextViewMore.setOnClickListener(this);
         }
 
         private void fillData(Parent parent, RecyclerView.LayoutManager layoutManager,
@@ -110,14 +123,23 @@ public class ParentAdapter extends RecyclerView.Adapter<ParentAdapter.SuperPlayl
             mTextViewMore.setVisibility(visibility);
             mRecyclerView.setAdapter(adapter);
         }
+
+        @Override
+        public void onClick(View v) {
+            mOnViewMoreClickListener.onViewMoreClick(mPlaylists);
+        }
     }
 
     public void addData(List datas) {
-        if (datas.get(DEFAULT_POSITON) instanceof Playlist){
-             mPlaylists.addAll(datas);
-        }else if(datas.get(DEFAULT_POSITON) instanceof Genre){
+        if (datas.get(DEFAULT_POSITON) instanceof Playlist) {
+            mPlaylists.addAll(datas);
+        } else if (datas.get(DEFAULT_POSITON) instanceof Genre) {
             mGenres.addAll(datas);
         }
         notifyDataSetChanged();
+    }
+
+    interface OnViewMoreClickListener {
+        void onViewMoreClick(List<Playlist> playlists);
     }
 }

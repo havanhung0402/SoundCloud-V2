@@ -9,20 +9,34 @@ import android.os.Parcelable;
 
 public class Playlist implements Parcelable {
 
+    private long mId;
     private String mTitle;
     private String mUrlImage;
+    private String mUrl;
 
     public Playlist() {
     }
 
-    public Playlist(String title, String urlImage) {
+    public Playlist(long id, String title, String urlImage, String url) {
+        mId = id;
         mTitle = title;
         mUrlImage = urlImage;
+        mUrl = url;
     }
 
     protected Playlist(Parcel in) {
+        mId = in.readLong();
         mTitle = in.readString();
         mUrlImage = in.readString();
+        mUrl = in.readString();
+    }
+
+    public long getId() {
+        return mId;
+    }
+
+    public void setId(long id) {
+        mId = id;
     }
 
     public String getTitle() {
@@ -41,6 +55,14 @@ public class Playlist implements Parcelable {
         mUrlImage = urlImage;
     }
 
+    public String getUrl() {
+        return mUrl;
+    }
+
+    public void setUrl(String url) {
+        mUrl = url;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -48,8 +70,10 @@ public class Playlist implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(mId);
         dest.writeString(mTitle);
         dest.writeString(mUrlImage);
+        dest.writeString(mUrl);
     }
 
     public static final Creator<Playlist> CREATOR = new Creator<Playlist>() {
