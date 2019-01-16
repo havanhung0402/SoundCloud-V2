@@ -1,6 +1,7 @@
 package com.framgia.music_31.screens.discover;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +65,7 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
 
         private void fillData(Genre genre) {
             if (genre != null) {
+                Log.i("Genre: ", String.valueOf(genre.getImage()));
                 mTextGenreName.setText(genre.getTitle());
                 mImageGenre.setImageResource(genre.getImage());
             }

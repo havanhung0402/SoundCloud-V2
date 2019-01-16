@@ -19,13 +19,14 @@ import com.framgia.music_31.data.model.Song;
 import com.framgia.music_31.data.repository.SongRepository;
 import com.framgia.music_31.data.source.local.SongLocalDataSource;
 import com.framgia.music_31.data.source.remote.SongRemoteDataSource;
+import com.framgia.music_31.screens.BaseActivity;
 import com.framgia.music_31.screens.player.PlayerMusicActivity;
 import com.framgia.music_31.service.MusicService;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SongActivity extends AppCompatActivity implements SongContract.View,
+public class SongActivity extends AppCompatActivity implements BaseActivity, SongContract.View,
         SongAdapter.SongItemClickListener{
 
     private static final String KEY_GENRE = "KEY_GENRE";
@@ -54,13 +55,13 @@ public class SongActivity extends AppCompatActivity implements SongContract.View
         initData();
     }
 
-    private void initComponents() {
+    public void initComponents() {
         mCollapsingToolbarLayout = findViewById(R.id.collapsing_toolbar);
         mImagePlaylist = findViewById(R.id.image_genre);
         mRecyclerView = findViewById(R.id.recycler_view);
     }
 
-    private void initData() {
+    public void initData() {
         String url = null;
         Genre genre = null;
         String action;
@@ -85,7 +86,7 @@ public class SongActivity extends AppCompatActivity implements SongContract.View
         initView(url, action);
     }
 
-    private void initView(String url, String action) {
+    public void initView(String url, String action) {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mSongAdapter);
